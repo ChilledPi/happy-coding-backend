@@ -25,7 +25,7 @@ public class FollowingController {
                                                                                         @RequestParam(defaultValue = "0") int page,
                                                                                         @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        Page<FollowListResponseDto> followList  = iFollowingService.getAllFollowings(pageable);
+        Page<FollowListResponseDto> followList  = iFollowingService.getAllFollowings(userId, pageable);
         PaginatedResponseDto<FollowListResponseDto> response = PaginatedResponseDto.of(followList);
         return ResponseEntity
                 .status(HttpStatus.OK)

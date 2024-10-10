@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IFollowingService {
-    Page<FollowListResponseDto> getAllFollowings(Pageable pageable);
 
     void following(Long userId, Long followingUserId);
 
     void unfollowing(Long userId, Long followingUserId);
+
+    Page<FollowListResponseDto> getAllFollowings(Long userId, Pageable pageable);
 }
