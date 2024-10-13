@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FollowingServiceImpl implements IFollowingService{
-    @Override
-    public Page<FollowListResponseDto> getAllFollowings(Pageable pageable) {
-        return null;
-    }
+
 
     @Override
     public void following(Long userId, Long followingUserId) {
@@ -20,5 +17,10 @@ public class FollowingServiceImpl implements IFollowingService{
     @Override
     public void unfollowing(Long userId, Long followingUserId) {
 
+    }
+
+    @Override
+    public Page<FollowListResponseDto> getAllFollowings(Long userId, Pageable pageable) {
+        return null;
     }
 }

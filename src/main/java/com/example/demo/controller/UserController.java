@@ -5,6 +5,8 @@ import com.example.demo.dto.request.user.SignUpRequestDto;
 import com.example.demo.dto.response.shared.ResponseDto;
 import com.example.demo.dto.response.user.UserProfileResponseDto;
 import com.example.demo.service.IUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.example.demo.constants.Constants.STATUS_200;
 import static com.example.demo.constants.Constants.STATUS_201;
-
+@Tag(name = "User API", description = "API related to user operations")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
@@ -20,6 +22,7 @@ public class UserController {
 
     private final IUserService iUserService;
 
+    @Operation(summary = "User sign-up", description = "This API allows a new user to sign-up.")
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseDto> signup(@RequestBody SignUpRequestDto signUpRequestDto){
         iUserService.signUpAccount(signUpRequestDto);
@@ -29,6 +32,7 @@ public class UserController {
     }
 
 
+    @Operation(summary = "User sign-in", description = "This API allows an existing user to log in.")
     @PostMapping("/sign-in")
     public ResponseEntity<ResponseDto> signup(@RequestBody LoginRequestDto loginRequestDto){
         iUserService.signInAccount(loginRequestDto);
@@ -36,7 +40,7 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(STATUS_200, "login success."));
     }
-
+    @Operation(summary = "Get user profile", description = "This API retrieves the profile of a specific user.")
     @GetMapping("/users/{userId}/profile")
     public ResponseEntity<UserProfileResponseDto> getProfile(@PathVariable Long userId){
         UserProfileResponseDto userProfileResponseDto = iUserService.getUserProfile(userId);
