@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Like extends BaseEntity {
+public class Reaction extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,9 +23,9 @@ public class Like extends BaseEntity {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
-    public static Like createLike(Users user, Diary diary) {
+    public static Reaction createLike(Users user, Diary diary) {
         diary.updateLikesCount();
-        return Like.builder()
+        return Reaction.builder()
                 .user(user)
                 .diary(diary)
                 .build();
