@@ -55,9 +55,10 @@ public class DiaryController {
     @PatchMapping(path = "/users/{userId}/diaries/{diaryId}", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDto> updateDiary(@PathVariable Long userId,
                                                    @PathVariable Long diaryId,
+                                                   @RequestPart("diary") DiaryRequestDto diaryRequestDto,
                                                    @RequestPart(value = "addImages", required = false) List<MultipartFile> addImages,
                                                    @RequestPart(value = "removeImages", required = false) List<Long> removeImageIds){
-        iDiaryService.patchDiary(userId, diaryId, addImages, removeImageIds);
+        iDiaryService.patchDiary(userId, diaryId, diaryRequestDto, addImages, removeImageIds);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseDto(Constants.STATUS_200, "patch diary success."));
 

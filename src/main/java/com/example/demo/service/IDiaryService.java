@@ -16,7 +16,7 @@ public interface IDiaryService {
 
     UserDiaryResponseDto getUserDiary(Long userId, Long diaryId);
 
-    void patchDiary(Long userId, Long diaryId, List<MultipartFile> addImages, List<Long> removeImageIds);
+    void patchDiary(Long userId, Long diaryId, DiaryRequestDto diaryRequestDto, List<MultipartFile> addImages, List<Long> removeImageIds);
 
     void deleteDiary(Long userId, Long diaryId);
 

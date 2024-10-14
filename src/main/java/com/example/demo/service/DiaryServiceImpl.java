@@ -25,7 +25,7 @@ public class DiaryServiceImpl implements IDiaryService{
     }
 
     @Override
-    public void patchDiary(Long userId, Long diaryId, List<MultipartFile> addImages, List<Long> removeImageIds) {
+    public void patchDiary(Long userId, Long diaryId, DiaryRequestDto diaryRequestDto, List<MultipartFile> addImages, List<Long> removeImageIds) {
 
     }
 
