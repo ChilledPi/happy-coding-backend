@@ -36,7 +36,7 @@ public class Diary extends BaseEntity {
     private Users user;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes;
+    private List<Reaction> reactions;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;

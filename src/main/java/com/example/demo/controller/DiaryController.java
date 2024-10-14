@@ -10,6 +10,12 @@ import com.example.demo.dto.response.shared.ResponseDto;
 import com.example.demo.entity.enums.DiaryStatus;
 import com.example.demo.service.IDiaryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,84 +37,110 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 public class DiaryController {
     private final IDiaryService iDiaryService;
 
-    @Operation(summary = "Write a new diary entry", description = "This API creates a new diary entry for a user.")
+    @Operation(summary = "Write a new diary entry",
+            description = "This API creates a new diary entry for a user.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Diary created successfully",
+                            content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            })
     @PostMapping(path = "/users/{userId}/diaries", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResponseDto> writeDiary(@PathVariable Long userId,
-                                                  @RequestPart("diary") DiaryRequestDto diaryRequestDto,
-                                                  @RequestPart("images") List<MultipartFile> images){
+    public ResponseEntity<ResponseDto> writeDiary(
+            @Parameter(description = "User ID", example = "1") @PathVariable Long userId,
+
+            @RequestPart("diary")
+            @Parameter(description = "Diary data containing the following fields:\n" +
+                    "- **Latitude** (`double`): Latitude of the diary entry, e.g., `37.7749`\n" +
+                    "- **Longitude** (`double`): Longitude of the diary entry, e.g., `-122.4194`\n" +
+                    "- **Title** (`string`): Title of the diary entry, e.g., `My Travel to San Francisco`\n" +
+                    "- **Content** (`string`): Content of the diary entry, e.g., `I visited several places in SF, including the Golden Gate Bridge.`\n" +
+                    "- **Date** (`date`): Date of the diary entry, e.g., `2023-10-12`\n" +
+                    "- **Diary Status** (`string`): Status of the diary entry, options are `PUBLIC`, `PRIVATE`, or `FOLLOWER`",
+                    content = @Content(mediaType = MULTIPART_FORM_DATA_VALUE,
+                            schema = @Schema(implementation = DiaryRequestDto.class)))
+            DiaryRequestDto diaryRequestDto,
+
+            @RequestPart("images")
+            @Parameter(description = "List of images to upload (Multipart file input)",
+                    content = @Content(mediaType = MULTIPART_FORM_DATA_VALUE,
+                            array = @ArraySchema(schema = @Schema(type = "string", format = "binary"))))
+            List<MultipartFile> images) {
+
         iDiaryService.createDiary(userId, diaryRequestDto, images);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDto(Constants.STATUS_201, "Diary created success."));
     }
 
-
-    @Operation(summary = "Get a specific diary entry", description = "This API retrieves a specific diary entry by its ID.")
+    @Operation(summary = "Get a specific diary entry", description = "Retrieve a specific diary entry by its ID.")
     @GetMapping("/users/{userId}/diaries/{diaryId}")
-    public ResponseEntity<UserDiaryResponseDto> getDiary(@PathVariable Long userId,
-                                                         @PathVariable Long diaryId){
+    public ResponseEntity<UserDiaryResponseDto> getDiary(@Parameter(description = "User ID") @PathVariable Long userId,
+                                                         @Parameter(description = "Diary ID") @PathVariable Long diaryId) {
         UserDiaryResponseDto userDiaryResponseDto = iDiaryService.getUserDiary(userId, diaryId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(userDiaryResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(userDiaryResponseDto);
     }
 
-    @Operation(summary = "Update a diary entry", description = "This API updates a specific diary entry by adding or removing images.")
+    @Operation(summary = "Update a diary entry", description = "Update a specific diary entry by adding or removing images.")
     @PatchMapping(path = "/users/{userId}/diaries/{diaryId}", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResponseDto> updateDiary(@PathVariable Long userId,
-                                                   @PathVariable Long diaryId,
-                                                   @RequestPart("diary") DiaryRequestDto diaryRequestDto,
-                                                   @RequestPart(value = "addImages", required = false) List<MultipartFile> addImages,
-                                                   @RequestPart(value = "removeImages", required = false) List<Long> removeImageIds){
+    public ResponseEntity<ResponseDto> updateDiary(@Parameter(description = "User ID") @PathVariable Long userId,
+                                                   @Parameter(description = "Diary ID") @PathVariable Long diaryId,
+                                                   @RequestPart("diary") @Parameter(description = "Diary data containing the following fields:\n" +
+                                                               "- **Latitude** (`double`): Latitude of the diary entry, e.g., `37.7749`\n" +
+                                                               "- **Longitude** (`double`): Longitude of the diary entry, e.g., `-122.4194`\n" +
+                                                               "- **Title** (`string`): Title of the diary entry, e.g., `My Travel to San Francisco`\n" +
+                                                               "- **Content** (`string`): Content of the diary entry, e.g., `I visited several places in SF, including the Golden Gate Bridge.`\n" +
+                                                               "- **Date** (`date`): Date of the diary entry, e.g., `2023-10-12`\n" +
+                                                               "- **Diary Status** (`string`): Status of the diary entry, options are `PUBLIC`, `PRIVATE`, or `FOLLOWER`",
+                                                               content = @Content(mediaType = MULTIPART_FORM_DATA_VALUE,
+                                                                       schema = @Schema(implementation = DiaryRequestDto.class)))
+                                                       DiaryRequestDto diaryRequestDto,
+                                                   @RequestPart(value = "addImages", required = false)
+                                                   @Parameter(description = "Images to add",
+                                                           content = @Content(mediaType = MULTIPART_FORM_DATA_VALUE,
+                                                                   array =  @ArraySchema(schema = @Schema(type = "string", format = "binary"))))
+                                                   List<MultipartFile> addImages,
+                                                   @RequestPart(value = "removeImages", required = false)
+                                                   @Parameter(description = "Image IDs to remove") List<Long> removeImageIds) {
         iDiaryService.patchDiary(userId, diaryId, diaryRequestDto, addImages, removeImageIds);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDto(Constants.STATUS_200, "patch diary success."));
-
+                .body(new ResponseDto(Constants.STATUS_200, "Patch diary success."));
     }
 
-    @Operation(summary = "Delete a diary entry", description = "This API deletes a specific diary entry.")
+    @Operation(summary = "Delete a diary entry", description = "Delete a specific diary entry.")
     @DeleteMapping("/users/{userId}/diaries/{diaryId}")
-    public ResponseEntity<ResponseDto> deleteDiary(@PathVariable Long userId,
-                                                   @PathVariable Long diaryId){
+    public ResponseEntity<ResponseDto> deleteDiary(@Parameter(description = "User ID") @PathVariable Long userId,
+                                                   @Parameter(description = "Diary ID") @PathVariable Long diaryId) {
         iDiaryService.deleteDiary(userId, diaryId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDto(Constants.STATUS_200, "delete diary success."));
+                .body(new ResponseDto(Constants.STATUS_200, "Delete diary success."));
     }
 
-
-    @Operation(summary = "Get all diaries for a user", description = "This API retrieves all diary entries for a specific user with pagination.")
+    @Operation(summary = "Get all diaries for a user", description = "Retrieve all diary entries for a user with pagination.")
     @GetMapping("/users/{userId}/diaries")
-    public ResponseEntity<PaginatedResponseDto<DiariesResponseDto>> getDiaries(@PathVariable Long userId,
-                                                                               @RequestParam DiaryStatus diaryStatus,
-                                                                               @RequestParam(defaultValue = "0") int page,
-                                                                               @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<PaginatedResponseDto<DiariesResponseDto>> getDiaries(
+            @Parameter(description = "User ID") @PathVariable Long userId,
+            @Parameter(description = "Diary Status (e.g., PUBLIC, PRIVATE, FOLLOWER)") @RequestParam DiaryStatus diaryStatus,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-
-        Page<DiariesResponseDto> diaries  = iDiaryService.getAllDiaries(userId, diaryStatus, pageable);
+        Page<DiariesResponseDto> diaries = iDiaryService.getAllDiaries(userId, diaryStatus, pageable);
         PaginatedResponseDto<DiariesResponseDto> response = PaginatedResponseDto.of(diaries);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-
-    @Operation(summary = "Get all public diaries", description = "This API retrieves all public diary entries with pagination.")
+    @Operation(summary = "Get all public diaries", description = "Retrieve all public diary entries with pagination.")
     @GetMapping("/diaries")
-    public ResponseEntity<PaginatedResponseDto<DiariesResponseDto>> getPublicDiaries(@RequestParam(defaultValue = "0") int page,
-                                                                                     @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<PaginatedResponseDto<DiariesResponseDto>> getPublicDiaries(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<DiariesResponseDto> diaries  = iDiaryService.getAllPublicDiaries(pageable);
+        Page<DiariesResponseDto> diaries = iDiaryService.getAllPublicDiaries(pageable);
         PaginatedResponseDto<DiariesResponseDto> response = PaginatedResponseDto.of(diaries);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @Operation(summary = "Get details of a public diary entry", description = "This API retrieves the details of a specific public diary entry.")
+    @Operation(summary = "Get details of a public diary entry", description = "Retrieve the details of a specific public diary entry.")
     @GetMapping("/diaries/{diaryId}")
-    public ResponseEntity<DiaryDetailsResponseDto> getPublicDiary(@PathVariable Long diaryId){
+    public ResponseEntity<DiaryDetailsResponseDto> getPublicDiary(@Parameter(description = "Diary ID") @PathVariable Long diaryId) {
         DiaryDetailsResponseDto diaryDetailsResponseDto = iDiaryService.getPublicDiary(diaryId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(diaryDetailsResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(diaryDetailsResponseDto);
     }
-
 }

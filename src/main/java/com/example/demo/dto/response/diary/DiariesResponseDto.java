@@ -5,15 +5,24 @@ import lombok.Getter;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
 @Getter
 @AllArgsConstructor
 public class DiariesResponseDto {
+
+    @Schema(description = "List of diary information")
     private List<DiaryInfo> diaryInfos;
 
     @Getter
     @AllArgsConstructor
     public static class DiaryInfo {
-        private Long diaryIds;
-        private String diaryTitles;
+
+        @Schema(description = "ID of the diary", example = "1")
+        private Long diaryId;
+
+        @Schema(description = "Title of the diary", example = "My Travel to Paris")
+        private String diaryTitle;
     }
 }
