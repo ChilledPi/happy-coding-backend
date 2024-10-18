@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @AllArgsConstructor
 public class DiaryDetailsResponseDto {
 
+    @Schema(description = "Writer name", example = "John Doe")
+    private String name;
+
     @Schema(description = "Latitude of the diary entry", example = "37.7749")
     private double latitude;
 
