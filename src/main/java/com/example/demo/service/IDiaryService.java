@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.diary.DiaryRequestDto;
-import com.example.demo.dto.response.diary.DiariesResponseDto;
+import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.enums.DiaryStatus;
@@ -20,9 +20,9 @@ public interface IDiaryService {
 
     void deleteDiary(Long userId, Long diaryId);
 
-    Page<DiariesResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable);
+    Page<DiaryResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable);
 
-    Page<DiariesResponseDto> getAllPublicDiaries(Pageable pageable);
+    Page<DiaryResponseDto> getAllPublicDiaries(Pageable pageable);
 
     DiaryDetailsResponseDto getPublicDiary(Long diaryId);
 }

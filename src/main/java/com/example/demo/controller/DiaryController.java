@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.constants.Constants;
 import com.example.demo.dto.request.diary.DiaryRequestDto;
-import com.example.demo.dto.response.diary.DiariesResponseDto;
+import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.dto.response.shared.PaginatedResponseDto;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -115,25 +114,25 @@ public class DiaryController {
 
     @Operation(summary = "Get all diaries for a user", description = "Retrieve all diary entries for a user with pagination.")
     @GetMapping("/users/{userId}/diaries")
-    public ResponseEntity<PaginatedResponseDto<DiariesResponseDto>> getDiaries(
+    public ResponseEntity<PaginatedResponseDto<DiaryResponseDto>> getDiaries(
             @Parameter(description = "User ID") @PathVariable Long userId,
             @Parameter(description = "Diary Status (e.g., PUBLIC, PRIVATE, FOLLOWER)") @RequestParam DiaryStatus diaryStatus,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<DiariesResponseDto> diaries = iDiaryService.getAllDiaries(userId, diaryStatus, pageable);
-        PaginatedResponseDto<DiariesResponseDto> response = PaginatedResponseDto.of(diaries);
+        Page<DiaryResponseDto> diaries = iDiaryService.getAllDiaries(userId, diaryStatus, pageable);
+        PaginatedResponseDto<DiaryResponseDto> response = PaginatedResponseDto.of(diaries);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Operation(summary = "Get all public diaries", description = "Retrieve all public diary entries with pagination.")
     @GetMapping("/diaries")
-    public ResponseEntity<PaginatedResponseDto<DiariesResponseDto>> getPublicDiaries(
+    public ResponseEntity<PaginatedResponseDto<DiaryResponseDto>> getPublicDiaries(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<DiariesResponseDto> diaries = iDiaryService.getAllPublicDiaries(pageable);
-        PaginatedResponseDto<DiariesResponseDto> response = PaginatedResponseDto.of(diaries);
+        Page<DiaryResponseDto> diaries = iDiaryService.getAllPublicDiaries(pageable);
+        PaginatedResponseDto<DiaryResponseDto> response = PaginatedResponseDto.of(diaries);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.response.follow.FollowListResponseDto;
+import com.example.demo.dto.response.follow.FollowResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class FollowingServiceImpl implements IFollowingService{
     }
 
     @Override
-    public Page<FollowListResponseDto> getAllFollowings(Long userId, Pageable pageable) {
+    public Page<FollowResponseDto> getAllFollowings(Long userId, Pageable pageable) {
         return null;
     }
 }

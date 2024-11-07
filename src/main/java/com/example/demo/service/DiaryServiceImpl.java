@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.diary.DiaryRequestDto;
-import com.example.demo.dto.response.diary.DiariesResponseDto;
+import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.enums.DiaryStatus;
@@ -35,12 +35,12 @@ public class DiaryServiceImpl implements IDiaryService{
     }
 
     @Override
-    public Page<DiariesResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
+    public Page<DiaryResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         return null;
     }
 
     @Override
-    public Page<DiariesResponseDto> getAllPublicDiaries(Pageable pageable) {
+    public Page<DiaryResponseDto> getAllPublicDiaries(Pageable pageable) {
         return null;
     }
 

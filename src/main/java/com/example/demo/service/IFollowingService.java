@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.response.follow.FollowListResponseDto;
+import com.example.demo.dto.response.follow.FollowResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,5 +10,5 @@ public interface IFollowingService {
 
     void unfollowing(Long userId, Long followingUserId);
 
-    Page<FollowListResponseDto> getAllFollowings(Long userId, Pageable pageable);
+    Page<FollowResponseDto> getAllFollowings(Long userId, Pageable pageable);
 }
