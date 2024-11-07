@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class
-DiaryServiceImpl implements IDiaryService {
+public class DiaryServiceImpl implements IDiaryService {
 
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
@@ -61,7 +60,7 @@ DiaryServiceImpl implements IDiaryService {
         diary.updateDiary(diaryRequestDto);
         //diaryRepository.save(diary);
         removeImageIds.forEach(i -> diary.getImages().removeIf(d -> Objects.equals(i, d.getId())));
-        removeImageIds.forEach(imageRepository::deleteById);
+//        removeImageIds.forEach(imageRepository::deleteById);
         addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
                 .forEach(i -> {
                     diary.addImage(i);
@@ -74,7 +73,7 @@ DiaryServiceImpl implements IDiaryService {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
         users.getDiaries().remove(diary);
-        diaryRepository.delete(diary);
+//        diaryRepository.delete(diary);
     }
 
     @Override
