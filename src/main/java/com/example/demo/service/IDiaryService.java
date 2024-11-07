@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface IDiaryService {
-    void createDiary(Long userId, DiaryRequestDto diaryRequestDto, List<MultipartFile> images);
+    long createDiary(Long userId, DiaryRequestDto diaryRequestDto, List<MultipartFile> images);
 
     UserDiaryResponseDto getUserDiary(Long userId, Long diaryId);
 

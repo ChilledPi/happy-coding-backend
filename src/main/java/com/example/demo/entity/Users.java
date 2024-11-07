@@ -21,9 +21,14 @@ public class Users extends BaseEntity {
     private String username;
     private String password;
     private String name;
+
+    @Builder.Default
     private Boolean premiumBadge = false;
+
+    @Builder.Default
     private Boolean notificationsEnabled = true;
 
+    @Builder.Default
     private Integer totalLikesCount = 0;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -70,7 +75,4 @@ public class Users extends BaseEntity {
         following.setUser(this);
         followings.add(following);
     }
-
-
-
 }

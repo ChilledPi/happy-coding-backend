@@ -1,5 +1,6 @@
 package com.example.demo.dto.response.diary;
 
+import com.example.demo.entity.Image;
 import com.example.demo.entity.enums.DiaryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 
 @Getter
-@AllArgsConstructor
 public class UserDiaryResponseDto {
 
     @Schema(description = "Writer name", example = "John Doe")
@@ -40,6 +40,18 @@ public class UserDiaryResponseDto {
 
     @Schema(description = "List of images associated with the diary")
     private List<ImageResponseDto> images;
+
+    public UserDiaryResponseDto(String name, double latitude, double longitude, String title, String content, LocalDate date, Integer likesCount, DiaryStatus diaryStatus, List<Image> images) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.likesCount = likesCount;
+        this.diaryStatus = diaryStatus;
+        this.images = images.stream().map(i -> new ImageResponseDto(i.getId(), i.getUrl())).toList();
+    }
 
     @Getter
     @AllArgsConstructor
