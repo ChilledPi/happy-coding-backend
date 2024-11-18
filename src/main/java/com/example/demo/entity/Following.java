@@ -19,6 +19,13 @@ public class Following extends BaseEntity {
     @JoinColumn(name = "following_id")
     private Users following;
 
+    public static Following createFollowing(Users users) {
+        Following following = Following.builder()
+                .build();
+        following.setUser(users);
+        return following;
+    }
+
     public void setUser(Users user) {
         this.following = user;
     }

@@ -23,7 +23,7 @@ public class Reaction extends BaseEntity {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
-    public static Reaction createLike(Users user, Diary diary) {
+    public static Reaction createReaction(Users user, Diary diary) {
         diary.updateLikesCount();
         return Reaction.builder()
                 .user(user)

@@ -210,9 +210,9 @@ class DiaryServiceImplTest {
         DiaryResponseDto diariesDto0 = content0.get(0);
 
         Pageable nextPageable = pageable.next();
-        Page<DiaryResponseDto> allPublicDiaries = diaryService.getAllPublicDiaries(nextPageable);
-        List<DiaryResponseDto> content = allPublicDiaries.getContent();
-        DiaryResponseDto diariesDto1 = content.get(0);
+        Page<DiaryResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(nextPageable);
+        List<DiaryResponseDto> content1 = allPublicDiaries1.getContent();
+        DiaryResponseDto diariesDto1 = content1.get(0);
 
         Assertions.assertEquals(diariesDto0.getDiaryTitle(), rqDto2.getTitle());
         Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto3.getTitle());

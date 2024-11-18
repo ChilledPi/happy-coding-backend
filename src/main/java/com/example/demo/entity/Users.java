@@ -72,7 +72,6 @@ public class Users extends BaseEntity {
     }
 
     public void addFollowing(Following following){
-        following.setUser(this);
         followings.add(following);
     }
 }
