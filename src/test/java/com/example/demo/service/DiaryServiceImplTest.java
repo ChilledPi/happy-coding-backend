@@ -61,7 +61,7 @@ class DiaryServiceImplTest {
         long diaryId = diaryService.createDiary(userId1, dto1, images);
         Diary findDiary = diaryRepository.findById(diaryId).get();
 
-        Assertions.assertEquals(dto1.getContent(), findDiary.getContent());
+        Assertions.assertEquals(findDiary.getContent(), dto1.getContent());
         Assertions.assertNotNull(findDiary.getImages().stream().filter(i -> i.getName().equals("Squidward.jpeg")).findAny().get());
     }
 
@@ -84,12 +84,12 @@ class DiaryServiceImplTest {
         UserDiaryResponseDto rsDto2 = diaryService.getUserDiary(userId1, diaryId2);
         UserDiaryResponseDto rsDto3 = diaryService.getUserDiary(userId2, diaryId3);
 
-        Assertions.assertEquals(rqDto1.getContent(), rsDto1.getContent());
-        Assertions.assertEquals(rqDto2.getContent(), rsDto2.getContent());
-        Assertions.assertEquals(rqDto3.getContent(), rsDto3.getContent());
-        Assertions.assertEquals(rsDto1.getImages().size(), 0);
-        Assertions.assertEquals(rsDto2.getImages().size(), 0);
-        Assertions.assertEquals(rsDto3.getImages().size(), 1);
+        Assertions.assertEquals(rsDto1.getContent(), rqDto1.getContent());
+        Assertions.assertEquals(rsDto2.getContent(), rqDto2.getContent());
+        Assertions.assertEquals(rsDto3.getContent(), rqDto3.getContent());
+        Assertions.assertEquals(0, rsDto1.getImages().size());
+        Assertions.assertEquals(0, rsDto2.getImages().size());
+        Assertions.assertEquals(1, rsDto3.getImages().size());
     }
 
     @Test
@@ -122,7 +122,7 @@ class DiaryServiceImplTest {
         Assertions.assertEquals(diary.getDate(), rqDto2.getDate());
         Assertions.assertEquals(diary.getDiaryStatus(), rqDto2.getDiaryStatus());
 
-        Assertions.assertEquals(diary.getImages().size(), 2);
+        Assertions.assertEquals(2, diary.getImages().size());
         Assertions.assertTrue(imageRepository.findByName("SpongeBob.jpeg").isPresent());
         Assertions.assertTrue(imageRepository.findByName("Patrick.jpeg").isEmpty());
         Assertions.assertTrue(imageRepository.findByName("Squidward.jpeg").isPresent());
@@ -144,7 +144,7 @@ class DiaryServiceImplTest {
         long diaryId2 = diaryService.createDiary(userId1, rqDto2, images);
         long diaryId3 = diaryService.createDiary(userId2, rqDto3, images);
 
-        Assertions.assertEquals(diaryRepository.count(), 3);
+        Assertions.assertEquals(3, diaryRepository.count());
 
         Diary diary1 = diaryRepository.findById(diaryId1).get();
         Diary diary2 = diaryRepository.findById(diaryId2).get();
@@ -153,13 +153,13 @@ class DiaryServiceImplTest {
         diaryService.deleteDiary(userId1, diaryId1);
         diaryService.deleteDiary(userId1, diaryId2);
 
-        Assertions.assertEquals(imageRepository.count(), 2);
+        Assertions.assertEquals(2, imageRepository.count());
 
         diaryService.deleteDiary(userId2, diaryId3);
 
-        Assertions.assertEquals(imageRepository.count(), 0);
+        Assertions.assertEquals(0, imageRepository.count());
 
-        Assertions.assertEquals(diaryRepository.count(), 0);
+        Assertions.assertEquals(0, diaryRepository.count());
     }
 
     @Test
@@ -180,14 +180,14 @@ class DiaryServiceImplTest {
         Page<DiaryResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, nextPageable);
         List<DiaryResponseDto> content2 = allDiaries2.getContent();
 
-        Assertions.assertEquals(content1.size(), 1);
-        Assertions.assertEquals(content2.size(), 1);
+        Assertions.assertEquals(1, content1.size());
+        Assertions.assertEquals(1, content2.size());
 
         DiaryResponseDto diariesDto1 = content1.get(0);
         DiaryResponseDto diariesDto2 = content2.get(0);
 
-        Assertions.assertEquals(rqDto1.getTitle(), diariesDto1.getDiaryTitle());
-        Assertions.assertEquals(rqDto2.getTitle(), diariesDto2.getDiaryTitle());
+        Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto1.getTitle());
+        Assertions.assertEquals(diariesDto2.getDiaryTitle(), rqDto2.getTitle());
     }
 
     @Test
@@ -210,12 +210,12 @@ class DiaryServiceImplTest {
         DiaryResponseDto diariesDto0 = content0.get(0);
 
         Pageable nextPageable = pageable.next();
-        Page<DiaryResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(nextPageable);
-        List<DiaryResponseDto> content1 = allPublicDiaries1.getContent();
-        DiaryResponseDto diariesDto1 = content1.get(0);
+        Page<DiaryResponseDto> allPublicDiaries = diaryService.getAllPublicDiaries(nextPageable);
+        List<DiaryResponseDto> content = allPublicDiaries.getContent();
+        DiaryResponseDto diariesDto1 = content.get(0);
 
-        Assertions.assertEquals(rqDto2.getTitle(), diariesDto0.getDiaryTitle());
-        Assertions.assertEquals(rqDto3.getTitle(), diariesDto1.getDiaryTitle());
+        Assertions.assertEquals(diariesDto0.getDiaryTitle(), rqDto2.getTitle());
+        Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto3.getTitle());
     }
 
 
@@ -238,11 +238,11 @@ class DiaryServiceImplTest {
         DiaryDetailsResponseDto rsDto2 = diaryService.getPublicDiary(diaryId2);
         DiaryDetailsResponseDto rsDto3 = diaryService.getPublicDiary(diaryId3);
 
-        Assertions.assertEquals(rqDto1.getContent(), rsDto1.getContent());
-        Assertions.assertEquals(rqDto2.getContent(), rsDto2.getContent());
-        Assertions.assertEquals(rqDto3.getContent(), rsDto3.getContent());
-        Assertions.assertEquals(rsDto1.getImages().size(), 0);
-        Assertions.assertEquals(rsDto2.getImages().size(), 0);
-        Assertions.assertEquals(rsDto3.getImages().size(), 1);
+        Assertions.assertEquals(rsDto1.getContent(), rqDto1.getContent());
+        Assertions.assertEquals(rsDto2.getContent(), rqDto2.getContent());
+        Assertions.assertEquals(rsDto3.getContent(), rqDto3.getContent());
+        Assertions.assertEquals(0, rsDto1.getImages().size());
+        Assertions.assertEquals(0, rsDto2.getImages().size());
+        Assertions.assertEquals(1, rsDto3.getImages().size());
     }
 }
