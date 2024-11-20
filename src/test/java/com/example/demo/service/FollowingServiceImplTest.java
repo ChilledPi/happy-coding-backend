@@ -1,11 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.response.follow.FollowResponseDto;
-import com.example.demo.entity.Following;
 import com.example.demo.entity.Users;
-import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.FollowingRepository;
-import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 class FollowingServiceImplTest {
@@ -55,8 +51,8 @@ class FollowingServiceImplTest {
         Users user2 = userRepository.findById(userId2).get();
         Users user3 = userRepository.findById(userId3).get();
 
-        Assertions.assertEquals(2, user1.getFollowings().size());
-        Assertions.assertEquals(1, user2.getFollowings().size());
+        Assertions.assertEquals(2, user1.getFollowers().size());
+        Assertions.assertEquals(1, user2.getFollowers().size());
         Assertions.assertEquals(3, followingRepository.count());
     }
 
@@ -74,8 +70,8 @@ class FollowingServiceImplTest {
         Users user2 = userRepository.findById(userId2).get();
 
         Assertions.assertEquals(followingRepository.count(), 0);
-        Assertions.assertEquals(user1.getFollowings().size(), 0);
-        Assertions.assertEquals(user2.getFollowings().size(), 0);
+        Assertions.assertEquals(user1.getFollowers().size(), 0);
+        Assertions.assertEquals(user2.getFollowers().size(), 0);
     }
 
     @Test

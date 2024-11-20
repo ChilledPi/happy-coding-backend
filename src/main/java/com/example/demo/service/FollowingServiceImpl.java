@@ -27,20 +27,18 @@ public class FollowingServiceImpl implements IFollowingService{
         Users users = userRepository.findById(userId).get();
         Users followingUser = userRepository.findById(followingUserId).get();
 
-        Following following = Following.createFollowing(followingUser);
-
-        users.addFollowing(following);
+        users.addFollowing(Following.createFollowing(followingUser));
     }
 
     @Override
     public void unfollowing(Long userId, Long followingUserId) {
         Users users = userRepository.findById(userId).get();
-        users.getFollowings().removeIf(following -> Objects.equals(followingUserId, following.getFollowing().getId()));
+        users.getFollowers().removeIf(following -> Objects.equals(followingUserId, following.getFollow().getId()));
     }
 
     @Override
     public Page<FollowResponseDto> getAllFollowings(Long userId, Pageable pageable) {
         return followingRepository.findAll(pageable)
-                .map(following -> new FollowResponseDto(following.getFollowing().getId(), following.getFollowing().getName(), following.getFollowing().getProfileImages()));
+                .map(following -> new FollowResponseDto(following.getFollow().getId(), following.getFollow().getName(), following.getFollow().getProfileImages()));
     }
 }
