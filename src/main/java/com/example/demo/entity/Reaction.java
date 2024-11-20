@@ -16,19 +16,18 @@ public class Reaction extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Users user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users user;
+
     public static Reaction createReaction(Users user, Diary diary) {
-        diary.updateLikesCount();
+        diary.addLikesCount();
         return Reaction.builder()
-                .user(user)
                 .diary(diary)
+                .user(user)
                 .build();
     }
-
 }

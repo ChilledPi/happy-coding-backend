@@ -35,7 +35,7 @@ public class ReactionController {
             @Parameter(description = "The ID of the user who likes the diary", example = "1") @PathVariable Long userId,
             @Parameter(description = "The ID of the diary being liked", example = "123") @PathVariable Long diaryId) {
 
-        iReactionService.plusLikeToDiary(userId, diaryId);
+        iReactionService.toggleDiaryLike(userId, diaryId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(STATUS_201, "Like created successfully."));

@@ -34,11 +34,17 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
 
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Following> followings = new ArrayList<>();
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Following> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "follow", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Following> follows = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> profileImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reaction> likes = new ArrayList<>();
 
 
     public static Users createUser(String username, String password, String name){
@@ -72,6 +78,7 @@ public class Users extends BaseEntity {
     }
 
     public void addFollowing(Following following){
-        followings.add(following);
+        following.setUser(this);
+        followers.add(following);
     }
 }

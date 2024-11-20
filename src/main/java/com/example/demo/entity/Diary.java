@@ -66,8 +66,12 @@ public class Diary extends BaseEntity {
         diaryStatus = diaryRequestDto.getDiaryStatus();
     }
 
-    public void updateLikesCount(){
+    public void addLikesCount(){
         this.likesCount++;
+    }
+
+    public void subtractLikeCount() {
+        this.likesCount--;
     }
 
 
