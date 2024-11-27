@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: spring-boot-app
     ports:
-      - "8081:8080"  # Spring Boot 애플리케이션 컨테이너를 8081로 매핑
+      - "8081:8081"  # Spring Boot 애플리케이션 컨테이너를 8081로 매핑
     environment:
       SPRING_PROFILES_ACTIVE: prod  # 프로파일 설정
     depends_on:

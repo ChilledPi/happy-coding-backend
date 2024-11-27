@@ -8,7 +8,7 @@ WORKDIR /app
 COPY build/libs/*.jar app.jar
 
 # Expose the port the app runs on
-EXPOSE 8080
+EXPOSE 8081
 
 # Run the Spring Boot application with 'prod' profile
 ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
