@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.request.diary.DiaryRequestDto;
 import com.example.demo.entity.base.BaseEntity;
 import com.example.demo.entity.enums.DiaryStatus;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.entity.enums.DiaryStatus.*;
@@ -25,9 +27,12 @@ public class Diary extends BaseEntity {
     private double longitude;
     private String title;
     private String content;
+    @Builder.Default
     private LocalDate date = LocalDate.now();
+    @Builder.Default
     private Integer likesCount = 0;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private DiaryStatus diaryStatus = PUBLIC;
 
@@ -36,10 +41,12 @@ public class Diary extends BaseEntity {
     private Users user;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reaction> reactions;
+    @Builder.Default
+    private List<Reaction> reactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
+    @Builder.Default
+    private List<Image> images = new ArrayList<>();
 
     public static Diary createDiary(double latitude, double longitude, String title, String content){
         return Diary.builder()
@@ -50,13 +57,23 @@ public class Diary extends BaseEntity {
                 .build();
     }
 
-    public void updateLikesCount(){
+    public void updateDiary(DiaryRequestDto diaryRequestDto) {
+        latitude = diaryRequestDto.getLatitude();
+        longitude = diaryRequestDto.getLongitude();
+        title = diaryRequestDto.getTitle();
+        content = diaryRequestDto.getContent();
+        date = diaryRequestDto.getDate();
+        diaryStatus = diaryRequestDto.getDiaryStatus();
+    }
+
+    public void addLikesCount(){
         this.likesCount++;
     }
 
-    public void updateStatus(DiaryStatus diaryStatus){
-        this.diaryStatus = diaryStatus;
+    public void subtractLikeCount() {
+        this.likesCount--;
     }
+
 
     public void addImage(Image image){
         image.setDiary(this);

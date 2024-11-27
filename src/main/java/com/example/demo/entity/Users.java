@@ -21,19 +21,30 @@ public class Users extends BaseEntity {
     private String username;
     private String password;
     private String name;
+
+    @Builder.Default
     private Boolean premiumBadge = false;
+
+    @Builder.Default
     private Boolean notificationsEnabled = true;
 
+    @Builder.Default
     private Integer totalLikesCount = 0;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
 
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Following> followings = new ArrayList<>();
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Following> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "follow", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Following> follows = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> profileImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reaction> likes = new ArrayList<>();
 
 
     public static Users createUser(String username, String password, String name){
@@ -52,8 +63,12 @@ public class Users extends BaseEntity {
         this.notificationsEnabled = status;
     }
 
-    public void updateTotalLikesCount(){
+    public void addTotalLikesCount(){
         this.totalLikesCount++;
+    }
+
+    public void subtractTotalLikesCount() {
+        this.totalLikesCount--;
     }
 
     public void addImage(Image image){
@@ -68,9 +83,6 @@ public class Users extends BaseEntity {
 
     public void addFollowing(Following following){
         following.setUser(this);
-        followings.add(following);
+        followers.add(following);
     }
-
-
-
 }

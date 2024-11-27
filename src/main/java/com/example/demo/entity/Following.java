@@ -16,10 +16,20 @@ public class Following extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_id")
-    private Users following;
+    @JoinColumn(name = "follow_id")
+    private Users follow;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "follower_id")
+    private Users follower;
+
+    public static Following createFollowing(Users users) {
+        return Following.builder()
+                .follow(users)
+                .build();
+    }
 
     public void setUser(Users user) {
-        this.following = user;
+        this.follower = user;
     }
 }

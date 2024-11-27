@@ -11,12 +11,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.demo.constants.Constants.STATUS_201;
+
 @Tag(name = "Like API", description = "API related to liking diaries")
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class ReactionController {
             @Parameter(description = "The ID of the user who likes the diary", example = "1") @PathVariable Long userId,
             @Parameter(description = "The ID of the diary being liked", example = "123") @PathVariable Long diaryId) {
 
-        iReactionService.plusLikeToDiary(userId, diaryId);
+        iReactionService.toggleDiaryLike(userId, diaryId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(STATUS_201, "Like created successfully."));

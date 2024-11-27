@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.constants.Constants;
-import com.example.demo.dto.response.follow.FollowListResponseDto;
+import com.example.demo.dto.response.follow.FollowResponseDto;
 import com.example.demo.dto.response.shared.PaginatedResponseDto;
 import com.example.demo.dto.response.shared.ResponseDto;
 import com.example.demo.service.IFollowingService;
@@ -34,14 +34,14 @@ public class FollowingController {
                                     schema = @Schema(implementation = PaginatedResponseDto.class)))
             })
     @GetMapping("/users/{userId}/follows")
-    public ResponseEntity<PaginatedResponseDto<FollowListResponseDto>> getFollowingList(
+    public ResponseEntity<PaginatedResponseDto<FollowResponseDto>> getFollowingList(
             @Parameter(description = "The ID of the user", example = "1") @PathVariable Long userId,
             @Parameter(description = "The page number for pagination", example = "0") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "The page size for pagination", example = "10") @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<FollowListResponseDto> followList = iFollowingService.getAllFollowings(userId, pageable);
-        PaginatedResponseDto<FollowListResponseDto> response = PaginatedResponseDto.of(followList);
+        Page<FollowResponseDto> followList = iFollowingService.getAllFollowings(userId, pageable);
+        PaginatedResponseDto<FollowResponseDto> response = PaginatedResponseDto.of(followList);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

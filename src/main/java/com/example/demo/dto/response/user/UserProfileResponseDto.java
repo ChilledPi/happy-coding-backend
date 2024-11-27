@@ -1,5 +1,6 @@
 package com.example.demo.dto.response.user;
 
+import com.example.demo.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 
 @Getter
-@AllArgsConstructor
 public class UserProfileResponseDto {
 
     @Schema(description = "ID of the user", example = "1")
@@ -21,6 +21,13 @@ public class UserProfileResponseDto {
 
     @Schema(description = "Profile image information")
     private ImageResponseDto profileImage;
+
+    public UserProfileResponseDto(Long id, String name, Boolean premiumBadge, Image profileImage) {
+        this.id = id;
+        this.name = name;
+        this.premiumBadge = premiumBadge;
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
+    }
 
     @Getter
     @AllArgsConstructor
