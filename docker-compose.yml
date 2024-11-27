@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: spring-boot-app
     ports:
-      - "8080:8080"
+      - "8081:8081"  # Spring Boot 애플리케이션 컨테이너를 8081로 매핑
     environment:
       SPRING_PROFILES_ACTIVE: prod  # 프로파일 설정
     depends_on:
@@ -21,14 +21,11 @@ services:
       MYSQL_DATABASE: testdb
     volumes:
       - mysql-data:/var/lib/mysql
-
-  adminer:
-    image: adminer
-    container_name: adminer
-    ports:
-      - "8081:8080"
-    depends_on:
-      - mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
   mysql-data:
