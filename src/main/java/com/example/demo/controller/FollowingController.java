@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Following API", description = "API related to following operations")
 @RestController
 @RequiredArgsConstructor
@@ -34,18 +36,14 @@ public class FollowingController {
                                     schema = @Schema(implementation = PaginatedResponseDto.class)))
             })
     @GetMapping("/users/{userId}/follows")
-    public ResponseEntity<PaginatedResponseDto<FollowResponseDto>> getFollowingList(
-            @Parameter(description = "The ID of the user", example = "1") @PathVariable Long userId,
-            @Parameter(description = "The page number for pagination", example = "0") @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "The page size for pagination", example = "10") @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<FollowResponseDto>> getFollowingList(
+            @Parameter(description = "The ID of the user", example = "1") @PathVariable Long userId) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<FollowResponseDto> followList = iFollowingService.getAllFollowings(userId, pageable);
-        PaginatedResponseDto<FollowResponseDto> response = PaginatedResponseDto.of(followList);
+        List<FollowResponseDto> followList = iFollowingService.getAllFollowings(userId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(response);
+                .body(followList);
     }
 
     @Operation(summary = "Follow a user",

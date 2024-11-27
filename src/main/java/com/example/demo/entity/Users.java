@@ -40,8 +40,9 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "follow", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Following> follows = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> profileImages = new ArrayList<>();
+    @Builder.Default
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Image profileImage = null;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reaction> likes = new ArrayList<>();
@@ -71,9 +72,9 @@ public class Users extends BaseEntity {
         this.totalLikesCount--;
     }
 
-    public void addImage(Image image){
+    public void setImage(Image image){
         image.setUser(this);
-        profileImages.add(image);
+        profileImage = image;
     }
 
     public void addDiary(Diary diary){
