@@ -22,11 +22,14 @@ public class UserProfileResponseDto {
     @Schema(description = "Profile image information")
     private ImageResponseDto profileImage;
 
-    public UserProfileResponseDto(Long id, String name, Boolean premiumBadge, Image profileImage) {
+    private int totalLikeCount;
+
+    public UserProfileResponseDto(Long id, String name, Boolean premiumBadge, Image profileImage, int totalLikeCount) {
         this.id = id;
         this.name = name;
         this.premiumBadge = premiumBadge;
         this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
+        this.totalLikeCount = totalLikeCount;
     }
 
     @Getter
