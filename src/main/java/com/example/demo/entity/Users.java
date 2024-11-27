@@ -63,8 +63,12 @@ public class Users extends BaseEntity {
         this.notificationsEnabled = status;
     }
 
-    public void updateTotalLikesCount(){
+    public void addTotalLikesCount(){
         this.totalLikesCount++;
+    }
+
+    public void subtractTotalLikesCount() {
+        this.totalLikesCount--;
     }
 
     public void addImage(Image image){

@@ -20,7 +20,7 @@ public class ReactionServiceImpl implements IReactionService {
 
     private final DiaryRepository diaryRepository;
 
-    public ReactionServiceImpl(UserRepository userRepository, DiaryRepository diaryRepository, ReactionRepository reactionRepository) {
+    public ReactionServiceImpl(UserRepository userRepository, DiaryRepository diaryRepository) {
         this.userRepository = userRepository;
         this.diaryRepository = diaryRepository;
     }
@@ -36,9 +36,11 @@ public class ReactionServiceImpl implements IReactionService {
 
         if (optionalReaction.isEmpty()) {
             reactions.add(Reaction.createReaction(users, diary));
+            users.addTotalLikesCount();
         } else {
             diary.subtractLikeCount();
             reactions.removeIf(reaction -> Objects.equals(userId, reaction.getUser().getId()));
+            users.subtractTotalLikesCount();
         }
     }
 }
