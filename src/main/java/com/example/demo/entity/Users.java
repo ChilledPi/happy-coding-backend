@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.base.BaseEntity;
+import com.example.demo.entity.enums.ImageType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,9 +41,8 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "follow", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Following> follows = new ArrayList<>();
 
-    @Builder.Default
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Image profileImage = null;
+    private Image profileImage;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reaction> likes = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Users extends BaseEntity {
         this.totalLikesCount--;
     }
 
-    public void setImage(Image image){
+    public void changeProfileImage(Image image){
         image.setUser(this);
         profileImage = image;
     }

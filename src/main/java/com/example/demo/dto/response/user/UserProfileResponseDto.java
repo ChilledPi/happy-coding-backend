@@ -24,12 +24,18 @@ public class UserProfileResponseDto {
 
     private int totalLikeCount;
 
-    public UserProfileResponseDto(Long id, String name, Boolean premiumBadge, Image profileImage, int totalLikeCount) {
+    private int totalDiaryCount;
+
+    private int totalFollowCount;
+
+    public UserProfileResponseDto(Long id, String name, Boolean premiumBadge, Image profileImage, int totalLikeCount, int totalDiaryCount, int totalFollowCount) {
         this.id = id;
         this.name = name;
         this.premiumBadge = premiumBadge;
         this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
         this.totalLikeCount = totalLikeCount;
+        this.totalDiaryCount = totalDiaryCount;
+        this.totalFollowCount = totalFollowCount;
     }
 
     @Getter
