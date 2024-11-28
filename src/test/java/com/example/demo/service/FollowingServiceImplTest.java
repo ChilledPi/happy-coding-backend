@@ -5,6 +5,7 @@ import com.example.demo.dto.response.follow.FollowResponseDto;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.FollowingRepository;
 import com.example.demo.repository.UserRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -80,5 +81,12 @@ class FollowingServiceImplTest {
 
         Assertions.assertEquals(userId2, following0.getUserIds());
         Assertions.assertEquals(userId3, following1.getUserIds());
+    }
+
+    @AfterAll
+    static void after(@Autowired UserRepository userRepository) {
+        userRepository.deleteById(userId1);
+        userRepository.deleteById(userId2);
+        userRepository.deleteById(userId3);
     }
 }

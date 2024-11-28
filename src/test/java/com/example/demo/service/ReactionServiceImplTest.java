@@ -6,6 +6,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.entity.enums.DiaryStatus;
 import com.example.demo.repository.ReactionRepository;
 import com.example.demo.repository.UserRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -57,4 +58,9 @@ class ReactionServiceImplTest {
 
     }
 
+    @AfterAll
+    static void after(@Autowired UserRepository userRepository) {
+        userRepository.deleteById(userId1);
+        userRepository.deleteById(userId2);
+    }
 }

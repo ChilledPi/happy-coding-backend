@@ -244,4 +244,10 @@ class DiaryServiceImplTest {
         Assertions.assertEquals(0, rsDto2.getImages().size());
         Assertions.assertEquals(1, rsDto3.getImages().size());
     }
+
+    @AfterAll
+    static void after(@Autowired UserRepository userRepository) {
+        userRepository.deleteById(userId1);
+        userRepository.deleteById(userId2);
+    }
 }
