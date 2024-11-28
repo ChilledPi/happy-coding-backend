@@ -26,25 +26,11 @@ public class DiaryResponseDto {
     @Schema(description = "List of images associated with the profile")
     private ImageResponseDto profileImage;
 
-    @Schema(description = "Date of the diary entry", example = "2023-10-12")
-    private LocalDate date;
-
-    @Schema(description = "Number of likes on the diary", example = "100")
-    private Integer likesCount;
-
-    @Schema(description = "List of images associated with the diary")
-    private List<ImageResponseDto> diaryImages;
-
-
-
-    public DiaryResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, Integer likesCount, List<Image> diaryImages) {
+    public DiaryResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage) {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;
         this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
-        this.date = date;
-        this.likesCount = likesCount;
-        this.diaryImages = diaryImages.stream().map(i -> new ImageResponseDto(i.getId(), i.getUrl())).toList();
     }
 
     @Getter
