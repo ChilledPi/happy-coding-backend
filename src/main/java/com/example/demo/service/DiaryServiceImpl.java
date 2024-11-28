@@ -80,13 +80,13 @@ public class DiaryServiceImpl implements IDiaryService {
     public Page<DiaryResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
         return diaryRepository.findByUserAndDiaryStatus(users, diaryStatus, pageable)
-                .map(diary -> new DiaryResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLikesCount(), diary.getImages()));
+                .map(diary -> new DiaryResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage()));
     }
 
     @Override
     public Page<DiaryResponseDto> getAllPublicDiaries(Pageable pageable) {
         return diaryRepository.findByDiaryStatus(DiaryStatus.PUBLIC, pageable)
-                .map(diary -> new DiaryResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(), diary.getDate(), diary.getLikesCount(), diary.getImages()));
+                .map(diary -> new DiaryResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage()));
     }
 
     @Override
