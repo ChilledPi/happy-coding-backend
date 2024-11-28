@@ -9,9 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -79,16 +76,9 @@ class FollowingServiceImplTest {
         followingService.following(userId1, userId2);
         followingService.following(userId1, userId3);
 
-        Pageable pageable = PageRequest.of(0, 1);
-
-        Page<FollowResponseDto> allFollowings0 = followingService.getAllFollowings(userId1, pageable);
-        List<FollowResponseDto> content0 = allFollowings0.getContent();
-        FollowResponseDto following0 = content0.get(0);
-
-        Pageable nextPageable = pageable.next();
-        Page<FollowResponseDto> allFollowings1 = followingService.getAllFollowings(userId1, nextPageable);
-        List<FollowResponseDto> content1 = allFollowings1.getContent();
-        FollowResponseDto following1 = content1.get(0);
+        List<FollowResponseDto> allFollowings = followingService.getAllFollowings(userId1);
+        FollowResponseDto following0 = allFollowings.get(0);
+        FollowResponseDto following1 = allFollowings.get(1);
 
         Assertions.assertEquals(userId2, following0.getUserIds());
         Assertions.assertEquals(userId3, following1.getUserIds());
