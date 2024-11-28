@@ -24,7 +24,7 @@ public class Image extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "user_id")
     private Users user = null;
 

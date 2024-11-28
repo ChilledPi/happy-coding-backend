@@ -23,13 +23,13 @@ public class DiaryResponseDto {
     private String diaryTitle;
 
     @Schema(description = "List of images associated with the profile")
-    private List<ImageResponseDto> profileImages;
+    private ImageResponseDto profileImage;
 
-    public DiaryResponseDto(Long diaryId, String name, String diaryTitle, List<Image> profileImages) {
+    public DiaryResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage) {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;
-        this.profileImages = profileImages.stream().map(i -> new ImageResponseDto(i.getId(), i.getUrl())).toList();
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
     }
 
     @Getter

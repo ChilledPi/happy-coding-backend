@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -37,8 +38,10 @@ public class FollowingServiceImpl implements IFollowingService{
     }
 
     @Override
-    public Page<FollowResponseDto> getAllFollowings(Long userId, Pageable pageable) {
-        return followingRepository.findAll(pageable)
-                .map(following -> new FollowResponseDto(following.getFollow().getId(), following.getFollow().getName(), following.getFollow().getProfileImages()));
+    public List<FollowResponseDto> getAllFollowings(Long userId) {
+        Users users = userRepository.findById(userId).get();
+        return followingRepository.findByFollower(users).stream()
+                .map(following -> new FollowResponseDto(following.getFollow().getId(), following.getFollow().getName(), following.getFollow().getProfileImage()))
+                .toList();
     }
 }

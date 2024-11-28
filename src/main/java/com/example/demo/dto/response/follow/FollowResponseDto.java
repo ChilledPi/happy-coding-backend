@@ -20,12 +20,12 @@ public class FollowResponseDto {
     private String followNames;
 
     @Schema(description = "List of images associated with the profile")
-    private List<ImageResponseDto> profileImages;
+    private ImageResponseDto profileImage;
 
-    public FollowResponseDto(Long userIds, String followNames, List<Image> profileImages) {
+    public FollowResponseDto(Long userIds, String followNames, Image profileImage) {
         this.userIds = userIds;
         this.followNames = followNames;
-        this.profileImages = profileImages.stream().map(i -> new ImageResponseDto(i.getId(), i.getUrl())).toList();
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
     }
 
     @Getter
