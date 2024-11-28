@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.diary.DiaryRequestDto;
+import com.example.demo.dto.request.user.SignUpRequestDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
@@ -43,11 +44,9 @@ class DiaryServiceImplTest {
     static long userId2;
 
     @BeforeAll
-    static void beforeAll(@Autowired UserRepository userRepository) {
-        Users users1 = Users.createUser("abc", "1234", "Tom");
-        Users users2 = Users.createUser("xyz", "0123", "Peter");
-        userId1 = userRepository.save(users1).getId();
-        userId2 = userRepository.save(users2).getId();
+    static void beforeAll(@Autowired IUserService userService) {
+        userId1 = userService.signUpAccount(new SignUpRequestDto("abc", "1234", "Tom"));
+        userId2 = userService.signUpAccount(new SignUpRequestDto("xyz", "0123", "Peter"));
     }
 
     @Test
@@ -153,11 +152,11 @@ class DiaryServiceImplTest {
         diaryService.deleteDiary(userId1, diaryId1);
         diaryService.deleteDiary(userId1, diaryId2);
 
-        Assertions.assertEquals(2, imageRepository.count());
+        Assertions.assertEquals(0, imageRepository.findByDiary(diary1).size());
+        Assertions.assertEquals(0, imageRepository.findByDiary(diary2).size());
+        Assertions.assertEquals(2, imageRepository.findByDiary(diary3).size());
 
         diaryService.deleteDiary(userId2, diaryId3);
-
-        Assertions.assertEquals(0, imageRepository.count());
 
         Assertions.assertEquals(0, diaryRepository.count());
     }
@@ -244,5 +243,11 @@ class DiaryServiceImplTest {
         Assertions.assertEquals(0, rsDto1.getImages().size());
         Assertions.assertEquals(0, rsDto2.getImages().size());
         Assertions.assertEquals(1, rsDto3.getImages().size());
+    }
+
+    @AfterAll
+    static void after(@Autowired UserRepository userRepository) {
+        userRepository.deleteById(userId1);
+        userRepository.deleteById(userId2);
     }
 }

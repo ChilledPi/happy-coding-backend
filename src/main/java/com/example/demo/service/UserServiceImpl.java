@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class UserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
 
@@ -19,9 +19,15 @@ public class UserServiceImpl implements IUserService{
         this.userRepository = userRepository;
     }
 
+    //TODO 디폴트 프로필 이미지
     @Override
-    public void signUpAccount(SignUpRequestDto signUpRequestDto) {
-
+    public long signUpAccount(SignUpRequestDto signUpRequestDto) {
+        if (!userRepository.existsByName(signUpRequestDto.getName())) {
+            Users user = Users.createUser(signUpRequestDto.getUsername(), signUpRequestDto.getPassword(), signUpRequestDto.getName());
+            user.changeProfileImage(Image.createImage("default", "default", "default", 1L, ImageType.USER_PROFILE, null, null));
+            return userRepository.save(user).getId();
+        }
+        return -1L;
     }
 
     @Override
@@ -32,12 +38,12 @@ public class UserServiceImpl implements IUserService{
     @Override
     public UserProfileResponseDto getUserProfile(Long userId) {
         Users users = userRepository.findById(userId).get();
-        return new UserProfileResponseDto(users.getId(), users.getName(), false, users.getProfileImage(), users.getTotalLikesCount());
+        return new UserProfileResponseDto(users.getId(), users.getName(), false, users.getProfileImage(), users.getTotalLikesCount(), users.getDiaries().size(), users.getFollows().size());
     }
 
     @Override
     public void uploadProfilePicture(Long userId, MultipartFile image) {
         Users users = userRepository.findById(userId).get();
-        users.setImage(Image.createImage(image.getOriginalFilename(), image.getName(), image.getOriginalFilename(), image.getSize(),  ImageType.USER_PROFILE, users, null));
+        users.changeProfileImage(Image.createImage(image.getOriginalFilename(), image.getName(), image.getOriginalFilename(), image.getSize(), ImageType.USER_PROFILE, users, null));
     }
 }

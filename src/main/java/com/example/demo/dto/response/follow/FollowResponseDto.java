@@ -1,14 +1,10 @@
 package com.example.demo.dto.response.follow;
 
-import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.List;
-
 
 @Getter
 public class FollowResponseDto {

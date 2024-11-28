@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.diary.DiaryRequestDto;
+import com.example.demo.dto.request.user.SignUpRequestDto;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.enums.DiaryStatus;
 import com.example.demo.repository.ReactionRepository;
 import com.example.demo.repository.UserRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -36,14 +38,9 @@ class ReactionServiceImplTest {
     static long userId2;
 
     @BeforeAll
-    static void before(@Autowired UserRepository userRepository) {
-        Users users1 = Users.createUser("abc", "1234", "Tom");
-        Users users2 = Users.createUser("xyz", "0123", "Peter");
-
-        userId1 = userRepository.save(users1).getId();
-        userId2 = userRepository.save(users2).getId();
-
-
+    static void before(@Autowired IUserService userService) {
+        userId1 = userService.signUpAccount(new SignUpRequestDto("abc", "1234", "Tom"));
+        userId2 = userService.signUpAccount(new SignUpRequestDto("xyz", "0123", "Peter"));
     }
 
     @Test
@@ -61,4 +58,9 @@ class ReactionServiceImplTest {
 
     }
 
+    @AfterAll
+    static void after(@Autowired UserRepository userRepository) {
+        userRepository.deleteById(userId1);
+        userRepository.deleteById(userId2);
+    }
 }

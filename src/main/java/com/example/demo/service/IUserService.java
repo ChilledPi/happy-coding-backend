@@ -6,8 +6,7 @@ import com.example.demo.dto.response.user.UserProfileResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IUserService {
-    void signUpAccount(SignUpRequestDto signUpRequestDto);
-
+    long signUpAccount(SignUpRequestDto signUpRequestDto);
 
     void signInAccount(LoginRequestDto loginRequestDto);
 

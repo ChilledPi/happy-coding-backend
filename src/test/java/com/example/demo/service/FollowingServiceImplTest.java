@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.request.user.SignUpRequestDto;
 import com.example.demo.dto.response.follow.FollowResponseDto;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.FollowingRepository;
 import com.example.demo.repository.UserRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,13 +31,10 @@ class FollowingServiceImplTest {
     static long userId3;
 
     @BeforeAll
-    static void beforeAll(@Autowired UserRepository userRepository) {
-        Users users1 = Users.createUser("abc", "1234", "Tom");
-        Users users2 = Users.createUser("xyz", "0123", "Peter");
-        Users users3 = Users.createUser("jkl", "0707", "Jack");
-        userId1 = userRepository.save(users1).getId();
-        userId2 = userRepository.save(users2).getId();
-        userId3 = userRepository.save(users3).getId();
+    static void beforeAll(@Autowired IUserService userService) {
+        userId1 = userService.signUpAccount(new SignUpRequestDto("abc", "1234", "Tom"));
+        userId2 = userService.signUpAccount(new SignUpRequestDto("xyz", "0123", "Peter"));
+        userId3 = userService.signUpAccount(new SignUpRequestDto("jkl", "0707", "Jack"));
     }
 
     @Test
@@ -82,5 +81,12 @@ class FollowingServiceImplTest {
 
         Assertions.assertEquals(userId2, following0.getUserIds());
         Assertions.assertEquals(userId3, following1.getUserIds());
+    }
+
+    @AfterAll
+    static void after(@Autowired UserRepository userRepository) {
+        userRepository.deleteById(userId1);
+        userRepository.deleteById(userId2);
+        userRepository.deleteById(userId3);
     }
 }
