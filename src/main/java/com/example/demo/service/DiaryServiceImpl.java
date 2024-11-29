@@ -73,8 +73,9 @@ public class DiaryServiceImpl implements IDiaryService {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
         List<Image> images = diary.getImages();
-        imageRepository.deleteAll(images);
-        images.clear();
+        if (images != null) {
+            images.clear();
+        }
         users.getDiaries().remove(diary);
         diaryRepository.delete(diary);
     }
