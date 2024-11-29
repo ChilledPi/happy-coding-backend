@@ -27,17 +27,20 @@ public class FollowingServiceImpl implements IFollowingService{
     public void following(Long userId, Long followingUserId) {
         Users users = userRepository.findById(userId).get();
         Users followingUser = userRepository.findById(followingUserId).get();
-        Following following = Following.createFollowing(followingUser);
+        Following following = Following.createFollowing();
+        users.addFollowing(following); //follower user
+        followingUser.addFollower(following);
         followingRepository.save(following);
-        users.addFollowing(following);
     }
 
     @Override
     public void unfollowing(Long userId, Long followingUserId) {
         Users users = userRepository.findById(userId).get();
-        Following following = users.getFollowers().stream().filter(f -> Objects.equals(followingUserId, f.getFollow().getId())).findAny().get();
+        Users followingUsers = userRepository.findById(followingUserId).get();
+        Following following = users.getFollows().stream().filter(f -> Objects.equals(followingUserId, f.getFollower().getId())).findAny().get();
+        users.getFollows().remove(following);
+        followingUsers.getFollowers().remove(following);
         followingRepository.delete(following);
-        users.getFollowers().remove(following);
     }
 
     @Override

@@ -47,8 +47,9 @@ class FollowingServiceImplTest {
         Users user2 = userRepository.findById(userId2).get();
         Users user3 = userRepository.findById(userId3).get();
 
-        Assertions.assertEquals(2, user1.getFollowers().size());
-        Assertions.assertEquals(1, user2.getFollowers().size());
+        System.out.println("user1.getFollows().size() = " + user1.getFollows().size());
+        Assertions.assertEquals(2, user1.getFollows().size());
+        Assertions.assertEquals(1, user2.getFollows().size());
         Assertions.assertEquals(3, followingRepository.count());
     }
 

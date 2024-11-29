@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.base.BaseEntity;
-import com.example.demo.entity.enums.ImageType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -83,7 +82,12 @@ public class Users extends BaseEntity {
     }
 
     public void addFollowing(Following following){
-        following.setUser(this);
+        following.setFollow(this);
+        follows.add(following);
+    }
+
+    public void addFollower(Following following) {
+        following.setFollower(this);
         followers.add(following);
     }
 }
