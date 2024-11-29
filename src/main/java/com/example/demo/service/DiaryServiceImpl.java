@@ -73,7 +73,7 @@ public class DiaryServiceImpl implements IDiaryService {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
         users.getDiaries().remove(diary);
-//        diaryRepository.delete(diary);
+        diaryRepository.delete(diary);
     }
 
     @Override
