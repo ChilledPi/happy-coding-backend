@@ -60,7 +60,7 @@ public class DiaryServiceImpl implements IDiaryService {
         diary.updateDiary(diaryRequestDto);
         //diaryRepository.save(diary);
         removeImageIds.forEach(i -> diary.getImages().removeIf(d -> Objects.equals(i, d.getId())));
-//        removeImageIds.forEach(imageRepository::deleteById);
+        removeImageIds.forEach(imageRepository::deleteById);
         addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
                 .forEach(i -> {
                     diary.addImage(i);
@@ -72,6 +72,9 @@ public class DiaryServiceImpl implements IDiaryService {
     public void deleteDiary(Long userId, Long diaryId) {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
+        List<Image> images = diary.getImages();
+        imageRepository.deleteAll(images);
+        images.clear();
         users.getDiaries().remove(diary);
         diaryRepository.delete(diary);
     }
