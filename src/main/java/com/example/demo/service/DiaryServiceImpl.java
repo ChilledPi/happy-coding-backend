@@ -15,6 +15,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
     @Override
+    @Transactional
     public long createDiary(Long userId, DiaryRequestDto diaryRequestDto, List<MultipartFile> images) {
         Users users = userRepository.findById(userId).get();
         Diary diary = Diary.createDiary(diaryRequestDto.getLatitude(), diaryRequestDto.getLongitude(), diaryRequestDto.getTitle(), diaryRequestDto.getContent());
@@ -48,12 +50,14 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
     @Override
+    @Transactional
     public UserDiaryResponseDto getUserDiary(Long userId, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId).get();
         return new UserDiaryResponseDto(diary.getUser().getName(), diary.getLatitude(), diary.getLongitude(), diary.getTitle(), diary.getContent(), diary.getDate(), diary.getLikesCount(), diary.getDiaryStatus(), diary.getImages());
     }
 
     @Override
+    @Transactional
     public void patchDiary(Long userId, Long diaryId, DiaryRequestDto diaryRequestDto, List<MultipartFile> addImages, List<Long> removeImageIds) {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
@@ -69,6 +73,7 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
     @Override
+    @Transactional
     public void deleteDiary(Long userId, Long diaryId) {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
@@ -81,6 +86,7 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
     @Override
+    @Transactional
     public Page<DiaryResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
         return diaryRepository.findByUserAndDiaryStatus(users, diaryStatus, pageable)
@@ -88,12 +94,14 @@ public class DiaryServiceImpl implements IDiaryService {
     }
 
     @Override
+    @Transactional
     public Page<DiaryResponseDto> getAllPublicDiaries(Pageable pageable) {
         return diaryRepository.findByDiaryStatus(DiaryStatus.PUBLIC, pageable)
                 .map(diary -> new DiaryResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage()));
     }
 
     @Override
+    @Transactional
     public DiaryDetailsResponseDto getPublicDiary(Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId).get();
         return new DiaryDetailsResponseDto(diary.getUser().getName(), diary.getLatitude(), diary.getLongitude(), diary.getTitle(), diary.getContent(), diary.getDate(), diary.getLikesCount(), diary.getDiaryStatus(), diary.getImages());

@@ -8,6 +8,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class FollowingServiceImpl implements IFollowingService{
     }
 
     @Override
+    @Transactional
     public void following(Long userId, Long followingUserId) {
         Users users = userRepository.findById(userId).get();
         Users followingUser = userRepository.findById(followingUserId).get();
@@ -34,6 +36,7 @@ public class FollowingServiceImpl implements IFollowingService{
     }
 
     @Override
+    @Transactional
     public void unfollowing(Long userId, Long followingUserId) {
         Users users = userRepository.findById(userId).get();
         Users followingUsers = userRepository.findById(followingUserId).get();
@@ -44,6 +47,7 @@ public class FollowingServiceImpl implements IFollowingService{
     }
 
     @Override
+    @Transactional
     public List<FollowResponseDto> getAllFollowings(Long userId) {
         Users users = userRepository.findById(userId).get();
         return followingRepository.findByFollow(users).stream()

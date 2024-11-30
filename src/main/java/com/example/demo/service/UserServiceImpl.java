@@ -8,6 +8,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.entity.enums.ImageType;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -21,6 +22,7 @@ public class UserServiceImpl implements IUserService {
 
     //TODO 디폴트 프로필 이미지
     @Override
+    @Transactional
     public long signUpAccount(SignUpRequestDto signUpRequestDto) {
         if (!userRepository.existsByName(signUpRequestDto.getName())) {
             Users user = Users.createUser(signUpRequestDto.getUsername(), signUpRequestDto.getPassword(), signUpRequestDto.getName());
@@ -36,12 +38,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserProfileResponseDto getUserProfile(Long userId) {
         Users users = userRepository.findById(userId).get();
         return new UserProfileResponseDto(users.getId(), users.getName(), false, users.getProfileImage(), users.getTotalLikesCount(), users.getDiaries().size(), users.getFollows().size());
     }
 
     @Override
+    @Transactional
     public void uploadProfilePicture(Long userId, MultipartFile image) {
         Users users = userRepository.findById(userId).get();
         users.changeProfileImage(Image.createImage(image.getOriginalFilename(), image.getName(), image.getOriginalFilename(), image.getSize(), ImageType.USER_PROFILE, users, null));

@@ -7,6 +7,7 @@ import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.ReactionRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class ReactionServiceImpl implements IReactionService {
     }
 
     @Override
+    @Transactional
     public void toggleDiaryLike(Long userId, Long diaryId) {
         Users users = userRepository.findById(userId).get();
         Diary diary = diaryRepository.findById(diaryId).get();
