@@ -25,8 +25,14 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public long signUpAccount(SignUpRequestDto signUpRequestDto) {
 
+        // 사용자 생성
         Users user = Users.createUser(signUpRequestDto.getUsername(), signUpRequestDto.getPassword(), signUpRequestDto.getName());
-        user.changeProfileImage(Image.createImage("default", "default", "default", 1L, ImageType.USER_PROFILE, null, null));
+
+        // 기본 프로필 이미지 생성
+        Image profileImage = Image.createImage("default.jpg", "default.jpg", "image/jpeg", 100L, ImageType.USER_PROFILE, user, null);
+        user.changeProfileImage(profileImage);
+
+        // 사용자 저장 후 ID 반환
         return userRepository.save(user).getId();
     }
 
