@@ -63,11 +63,13 @@ public class DiaryServiceImpl implements IDiaryService {
         //diaryRepository.save(diary);
         removeImageIds.forEach(i -> diary.getImages().removeIf(d -> Objects.equals(i, d.getId())));
         removeImageIds.forEach(imageRepository::deleteById);
-        addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
-                .forEach(i -> {
-                    diary.addImage(i);
-                    imageRepository.save(i);
-                });
+        if (!addImages.isEmpty()) {
+            addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
+                    .forEach(i -> {
+                        diary.addImage(i);
+                        imageRepository.save(i);
+                    });
+        }
     }
 
     @Override
