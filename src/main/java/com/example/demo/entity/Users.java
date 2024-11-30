@@ -31,17 +31,21 @@ public class Users extends BaseEntity {
     @Builder.Default
     private Integer totalLikesCount = 0;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Following> followers = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "follow", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Following> follows = new ArrayList<>();
 
+    @Builder.Default
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Image profileImage;
+    private Image profileImage = null;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reaction> likes = new ArrayList<>();

@@ -24,10 +24,12 @@ public class Image extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
+    @Builder.Default
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "user_id")
     private Users user = null;
 
+    @Builder.Default
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "diary_id")
     private Diary diary = null;
