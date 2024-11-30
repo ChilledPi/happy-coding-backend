@@ -6,6 +6,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.ReactionRepository;
 import com.example.demo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,17 +15,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ReactionServiceImpl implements IReactionService {
 
 
     private final UserRepository userRepository;
 
     private final DiaryRepository diaryRepository;
-
-    public ReactionServiceImpl(UserRepository userRepository, DiaryRepository diaryRepository) {
-        this.userRepository = userRepository;
-        this.diaryRepository = diaryRepository;
-    }
 
     @Override
     @Transactional

@@ -12,6 +12,7 @@ import com.example.demo.entity.enums.ImageType;
 import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class DiaryServiceImpl implements IDiaryService {
 
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
     private final ImageRepository imageRepository;
 
-    public DiaryServiceImpl(UserRepository userRepository, DiaryRepository diaryRepository, ImageRepository imageRepository) {
-        this.userRepository = userRepository;
-        this.diaryRepository = diaryRepository;
-        this.imageRepository = imageRepository;
-    }
 
     @Override
     @Transactional
