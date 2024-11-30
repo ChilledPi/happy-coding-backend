@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.request.diary.DiaryRequestDto;
 import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
+import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.enums.DiaryStatus;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public interface IDiaryService {
 
     void deleteDiary(Long userId, Long diaryId);
 
-    Page<DiaryResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable);
+    Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable);
 
     Page<DiaryResponseDto> getAllPublicDiaries(Pageable pageable);
 

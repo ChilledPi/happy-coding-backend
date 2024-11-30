@@ -4,6 +4,7 @@ import com.example.demo.dto.request.diary.DiaryRequestDto;
 import com.example.demo.dto.request.user.SignUpRequestDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.DiaryResponseDto;
+import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.Diary;
 import com.example.demo.entity.Users;
@@ -172,18 +173,18 @@ class DiaryServiceImplTest {
         long diaryId2 = diaryService.createDiary(userId1, rqDto2, images2);
 
         Pageable pageable = PageRequest.of(0, 1);
-        Page<DiaryResponseDto> allDiaries1 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, pageable);
-        List<DiaryResponseDto> content1 = allDiaries1.getContent();
+        Page<MappingDiaryDetailsResponseDto> allDiaries1 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, pageable);
+        List<MappingDiaryDetailsResponseDto> content1 = allDiaries1.getContent();
 
         Pageable nextPageable = pageable.next();
-        Page<DiaryResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, nextPageable);
-        List<DiaryResponseDto> content2 = allDiaries2.getContent();
+        Page<MappingDiaryDetailsResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, nextPageable);
+        List<MappingDiaryDetailsResponseDto> content2 = allDiaries2.getContent();
 
         Assertions.assertEquals(1, content1.size());
         Assertions.assertEquals(1, content2.size());
 
-        DiaryResponseDto diariesDto1 = content1.get(0);
-        DiaryResponseDto diariesDto2 = content2.get(0);
+        MappingDiaryDetailsResponseDto diariesDto1 = content1.get(0);
+        MappingDiaryDetailsResponseDto diariesDto2 = content2.get(0);
 
         Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto1.getTitle());
         Assertions.assertEquals(diariesDto2.getDiaryTitle(), rqDto2.getTitle());
