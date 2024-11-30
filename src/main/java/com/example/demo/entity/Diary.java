@@ -40,12 +40,12 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reaction> reactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
     public static Diary createDiary(double latitude, double longitude, String title, String content){
