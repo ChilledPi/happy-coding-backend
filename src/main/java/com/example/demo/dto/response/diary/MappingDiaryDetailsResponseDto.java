@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 public class MappingDiaryDetailsResponseDto {
@@ -32,7 +33,9 @@ public class MappingDiaryDetailsResponseDto {
     private double longitude;
 
 
-    public MappingDiaryDetailsResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, double latitude, double longitude ) {
+
+
+    public MappingDiaryDetailsResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, double latitude, double longitude) {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;

@@ -205,14 +205,14 @@ class DiaryServiceImplTest {
 
         diaryService.patchDiary(userId1, diaryId1, new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PRIVATE), images3, List.of());
         Pageable pageable = PageRequest.of(0, 1);
-        Page<DiaryResponseDto> allPublicDiaries0 = diaryService.getAllPublicDiaries(pageable);
-        List<DiaryResponseDto> content0 = allPublicDiaries0.getContent();
-        DiaryResponseDto diariesDto0 = content0.get(0);
+        Page<MappingDiaryDetailsResponseDto> allPublicDiaries0 = diaryService.getAllPublicDiaries(pageable);
+        List<MappingDiaryDetailsResponseDto> content0 = allPublicDiaries0.getContent();
+        MappingDiaryDetailsResponseDto diariesDto0 = content0.get(0);
 
         Pageable nextPageable = pageable.next();
-        Page<DiaryResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(nextPageable);
-        List<DiaryResponseDto> content1 = allPublicDiaries1.getContent();
-        DiaryResponseDto diariesDto1 = content1.get(0);
+        Page<MappingDiaryDetailsResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(nextPageable);
+        List<MappingDiaryDetailsResponseDto> content1 = allPublicDiaries1.getContent();
+        MappingDiaryDetailsResponseDto diariesDto1 = content1.get(0);
 
         Assertions.assertEquals(diariesDto0.getDiaryTitle(), rqDto2.getTitle());
         Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto3.getTitle());
