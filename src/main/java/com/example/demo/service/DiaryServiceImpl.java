@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.request.diary.DiaryRequestDto;
 import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
+import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.Diary;
 import com.example.demo.entity.Image;
@@ -62,11 +63,13 @@ public class DiaryServiceImpl implements IDiaryService {
         //diaryRepository.save(diary);
         removeImageIds.forEach(i -> diary.getImages().removeIf(d -> Objects.equals(i, d.getId())));
         removeImageIds.forEach(imageRepository::deleteById);
-        addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
-                .forEach(i -> {
-                    diary.addImage(i);
-                    imageRepository.save(i);
-                });
+        if (!addImages.isEmpty()) {
+            addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
+                    .forEach(i -> {
+                        diary.addImage(i);
+                        imageRepository.save(i);
+                    });
+        }
     }
 
     @Override
@@ -84,10 +87,10 @@ public class DiaryServiceImpl implements IDiaryService {
 
     @Override
     @Transactional
-    public Page<DiaryResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
+    public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
         return diaryRepository.findByUserAndDiaryStatus(users, diaryStatus, pageable)
-                .map(diary -> new DiaryResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage()));
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude()));
     }
 
     @Override
