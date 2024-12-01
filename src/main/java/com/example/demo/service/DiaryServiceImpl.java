@@ -89,7 +89,7 @@ public class DiaryServiceImpl implements IDiaryService {
     @Transactional
     public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
-        return diaryRepository.findByUserAndDiaryStatus(users, diaryStatus, pageable)
+        return diaryRepository.findByUserAndDiaryStatusLessThanEqual(users, diaryStatus, pageable)
                 .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude()));
     }
 
