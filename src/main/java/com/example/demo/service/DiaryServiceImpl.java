@@ -6,12 +6,14 @@ import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.Diary;
+import com.example.demo.entity.Following;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.enums.DiaryStatus;
 import com.example.demo.entity.enums.ImageType;
 import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.ImageRepository;
+import com.example.demo.repository.ReactionRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ public class DiaryServiceImpl implements IDiaryService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
     private final ImageRepository imageRepository;
+    private final ReactionRepository reactionRepository;
 
 
     @Override
@@ -89,7 +92,7 @@ public class DiaryServiceImpl implements IDiaryService {
     @Transactional
     public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
-        return diaryRepository.findByUserAndDiaryStatusLessThanEqual(users, diaryStatus, pageable)
+        return diaryRepository.findByFollowingUserAndDiaryStatusLessThanEqual(userId, diaryStatus, pageable)
                 .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude()));
     }
 
