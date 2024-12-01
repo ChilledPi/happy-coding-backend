@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
@@ -24,16 +26,20 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public long signUpAccount(SignUpRequestDto signUpRequestDto) {
+        Optional<Users> byName = userRepository.findByName(signUpRequestDto.getName());
+        if (byName.isEmpty()) {
+            // 사용자 생성
+            Users user = Users.createUser(signUpRequestDto.getUsername(), signUpRequestDto.getPassword(), signUpRequestDto.getName());
 
-        // 사용자 생성
-        Users user = Users.createUser(signUpRequestDto.getUsername(), signUpRequestDto.getPassword(), signUpRequestDto.getName());
+            // 기본 프로필 이미지 생성
+            Image profileImage = Image.createImage("default.jpg", "default.jpg", "image/jpeg", 100L, ImageType.USER_PROFILE, user, null);
+            user.changeProfileImage(profileImage);
 
-        // 기본 프로필 이미지 생성
-        Image profileImage = Image.createImage("default.jpg", "default.jpg", "image/jpeg", 100L, ImageType.USER_PROFILE, user, null);
-        user.changeProfileImage(profileImage);
-
-        // 사용자 저장 후 ID 반환
-        return userRepository.save(user).getId();
+            // 사용자 저장 후 ID 반환
+            return userRepository.save(user).getId();
+        } else {
+            return byName.get().getId();
+        }
     }
 
     @Override

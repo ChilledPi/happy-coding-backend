@@ -11,4 +11,6 @@ import java.util.List;
 public interface FollowingRepository extends JpaRepository<Following, Long> {
 
     List<Following> findByFollow(Users users);
+
+    boolean existsByFollowerAndFollow(Users follower, Users follow);
 }
