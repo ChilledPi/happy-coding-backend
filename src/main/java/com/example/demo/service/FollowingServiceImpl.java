@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class FollowingServiceImpl implements IFollowingService{
+public class FollowingServiceImpl implements IFollowingService {
 
     private final UserRepository userRepository;
     private final FollowingRepository followingRepository;
@@ -27,10 +27,12 @@ public class FollowingServiceImpl implements IFollowingService{
     public void following(Long userId, Long followingUserId) {
         Users users = userRepository.findById(userId).get();
         Users followingUser = userRepository.findById(followingUserId).get();
-        Following following = Following.createFollowing();
-        users.addFollowing(following); //follower user
-        followingUser.addFollower(following);
-        followingRepository.save(following);
+        if (!followingRepository.existsByFollowerAndFollow(followingUser, users)) {
+            Following following = Following.createFollowing();
+            users.addFollowing(following); //follower user
+            followingUser.addFollower(following);
+            followingRepository.save(following);
+        }
     }
 
     @Override
