@@ -128,12 +128,12 @@ public class DiaryController {
 
     @Operation(summary = "Get all public diaries", description = "Retrieve all public diary entries with pagination.")
     @GetMapping("/diaries")
-    public ResponseEntity<PaginatedResponseDto<DiaryResponseDto>> getPublicDiaries(
+    public ResponseEntity<PaginatedResponseDto<MappingDiaryDetailsResponseDto>> getPublicDiaries(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<DiaryResponseDto> diaries = iDiaryService.getAllPublicDiaries(pageable);
-        PaginatedResponseDto<DiaryResponseDto> response = PaginatedResponseDto.of(diaries);
+        Page<MappingDiaryDetailsResponseDto> diaries = iDiaryService.getAllPublicDiaries(pageable);
+        PaginatedResponseDto<MappingDiaryDetailsResponseDto> response = PaginatedResponseDto.of(diaries);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

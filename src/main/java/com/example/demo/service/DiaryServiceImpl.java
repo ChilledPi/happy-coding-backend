@@ -95,9 +95,9 @@ public class DiaryServiceImpl implements IDiaryService {
 
     @Override
     @Transactional
-    public Page<DiaryResponseDto> getAllPublicDiaries(Pageable pageable) {
+    public Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Pageable pageable) {
         return diaryRepository.findByDiaryStatus(DiaryStatus.PUBLIC, pageable)
-                .map(diary -> new DiaryResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage()));
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(),  diary.getDate(), diary.getLatitude(), diary.getLongitude()));
     }
 
     @Override
