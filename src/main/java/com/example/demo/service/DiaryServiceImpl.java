@@ -39,7 +39,7 @@ public class DiaryServiceImpl implements IDiaryService {
         Diary diary = Diary.createDiary(diaryRequestDto.getLatitude(), diaryRequestDto.getLongitude(), diaryRequestDto.getTitle(), diaryRequestDto.getContent());
         users.addDiary(diary);
         diaryRepository.save(diary);
-        images.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
+        images.stream().map(i -> Image.createImage(i.getOriginalFilename(), i.getName(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
                 .forEach(i -> {
                     diary.addImage(i);
                     imageRepository.save(i);
@@ -64,7 +64,7 @@ public class DiaryServiceImpl implements IDiaryService {
         removeImageIds.forEach(i -> diary.getImages().removeIf(d -> Objects.equals(i, d.getId())));
         removeImageIds.forEach(imageRepository::deleteById);
         if (!addImages.isEmpty()) {
-            addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), "images/" + i.getOriginalFilename(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
+            addImages.stream().map(i -> Image.createImage(i.getOriginalFilename(), i.getName(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
                     .forEach(i -> {
                         diary.addImage(i);
                         imageRepository.save(i);
