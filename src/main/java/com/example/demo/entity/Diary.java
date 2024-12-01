@@ -33,7 +33,7 @@ public class Diary extends BaseEntity {
     private Integer likesCount = 0;
 
     @Builder.Default
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private DiaryStatus diaryStatus = PUBLIC;
 
     @ManyToOne
