@@ -32,9 +32,8 @@ public class Diary extends BaseEntity {
     @Builder.Default
     private Integer likesCount = 0;
 
-    @Builder.Default
     @Enumerated(EnumType.ORDINAL)
-    private DiaryStatus diaryStatus = PUBLIC;
+    private DiaryStatus diaryStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -48,12 +47,13 @@ public class Diary extends BaseEntity {
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
-    public static Diary createDiary(double latitude, double longitude, String title, String content){
+    public static Diary createDiary(double latitude, double longitude, String title, String content, DiaryStatus diaryStatus){
         return Diary.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .title(title)
                 .content(content)
+                .diaryStatus(diaryStatus)
                 .build();
     }
 

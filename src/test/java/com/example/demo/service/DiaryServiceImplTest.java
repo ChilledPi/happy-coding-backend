@@ -163,31 +163,32 @@ class DiaryServiceImplTest {
     }
 
     @Test
-    void getAllDiaries() {
+    void getAllDiaries(@Autowired IFollowingService followingService) {
         DiaryRequestDto rqDto1 = new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PUBLIC);
         DiaryRequestDto rqDto2 = new DiaryRequestDto(38, 128, "today", "나는 오늘 밥을 먹었다", LocalDate.now(), DiaryStatus.PUBLIC);
+        DiaryRequestDto rqDto3 = new DiaryRequestDto(38, 128, "tomorrow", "나는 내일 밥을 먹었다", LocalDate.now().plusDays(1), DiaryStatus.PUBLIC);
+
         List<MultipartFile> images1 = new ArrayList<>();
         List<MultipartFile> images2 = new ArrayList<>();
+        List<MultipartFile> images3 = new ArrayList<>();
 
-        long diaryId1 = diaryService.createDiary(userId1, rqDto1, images1);
-        long diaryId2 = diaryService.createDiary(userId1, rqDto2, images2);
+        long diaryId1 = diaryService.createDiary(userId2, rqDto1, images1);
+        long diaryId2 = diaryService.createDiary(userId2, rqDto2, images2);
+        long diaryId3 = diaryService.createDiary(userId2, rqDto3, images3);
 
-        Pageable pageable = PageRequest.of(0, 1);
+        diaryService.patchDiary(userId2, diaryId1, new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PRIVATE), new ArrayList<>(), new ArrayList<>());
+        diaryService.patchDiary(userId2, diaryId2, new DiaryRequestDto(38, 128, "today", "나는 오늘 밥을 먹었다", LocalDate.now(), DiaryStatus.FOLLOWER), new ArrayList<>(), new ArrayList<>());
+
+        followingService.following(userId1, userId2);
+
+        Pageable pageable = PageRequest.of(0, 3);
         Page<MappingDiaryDetailsResponseDto> allDiaries1 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, pageable);
-        List<MappingDiaryDetailsResponseDto> content1 = allDiaries1.getContent();
+        Page<MappingDiaryDetailsResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.FOLLOWER, pageable);
+        Page<MappingDiaryDetailsResponseDto> allDiaries3 = diaryService.getAllDiaries(userId1, DiaryStatus.PRIVATE, pageable);
 
-        Pageable nextPageable = pageable.next();
-        Page<MappingDiaryDetailsResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, nextPageable);
-        List<MappingDiaryDetailsResponseDto> content2 = allDiaries2.getContent();
-
-        Assertions.assertEquals(1, content1.size());
-        Assertions.assertEquals(1, content2.size());
-
-        MappingDiaryDetailsResponseDto diariesDto1 = content1.get(0);
-        MappingDiaryDetailsResponseDto diariesDto2 = content2.get(0);
-
-        Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto1.getTitle());
-        Assertions.assertEquals(diariesDto2.getDiaryTitle(), rqDto2.getTitle());
+        Assertions.assertEquals(1, allDiaries1.stream().count());
+        Assertions.assertEquals(2, allDiaries2.stream().count());
+        Assertions.assertEquals(3, allDiaries3.stream().count());
     }
 
     @Test
@@ -204,18 +205,20 @@ class DiaryServiceImplTest {
         long diaryId3 = diaryService.createDiary(userId2, rqDto3, images3);
 
         diaryService.patchDiary(userId1, diaryId1, new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PRIVATE), images3, List.of());
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<MappingDiaryDetailsResponseDto> allPublicDiaries0 = diaryService.getAllPublicDiaries(pageable);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<MappingDiaryDetailsResponseDto> allPublicDiaries0 = diaryService.getAllPublicDiaries(userId1, pageable);
         List<MappingDiaryDetailsResponseDto> content0 = allPublicDiaries0.getContent();
         MappingDiaryDetailsResponseDto diariesDto0 = content0.get(0);
 
-        Pageable nextPageable = pageable.next();
-        Page<MappingDiaryDetailsResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(nextPageable);
+        Page<MappingDiaryDetailsResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(userId2, pageable);
         List<MappingDiaryDetailsResponseDto> content1 = allPublicDiaries1.getContent();
         MappingDiaryDetailsResponseDto diariesDto1 = content1.get(0);
 
-        Assertions.assertEquals(diariesDto0.getDiaryTitle(), rqDto2.getTitle());
-        Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto3.getTitle());
+
+        Assertions.assertEquals(1, content0.size());
+        Assertions.assertEquals(diariesDto0.getDiaryTitle(), rqDto3.getTitle());
+        Assertions.assertEquals(1, content1.size());
+        Assertions.assertEquals(diariesDto1.getDiaryTitle(), rqDto2.getTitle());
     }
 
 
