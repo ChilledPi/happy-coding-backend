@@ -39,7 +39,7 @@ public class DiaryServiceImpl implements IDiaryService {
     @Transactional
     public long createDiary(Long userId, DiaryRequestDto diaryRequestDto, List<MultipartFile> images) {
         Users users = userRepository.findById(userId).get();
-        Diary diary = Diary.createDiary(diaryRequestDto.getLatitude(), diaryRequestDto.getLongitude(), diaryRequestDto.getTitle(), diaryRequestDto.getContent());
+        Diary diary = Diary.createDiary(diaryRequestDto.getLatitude(), diaryRequestDto.getLongitude(), diaryRequestDto.getTitle(), diaryRequestDto.getContent(), diaryRequestDto.getDiaryStatus());
         users.addDiary(diary);
         diaryRepository.save(diary);
         images.stream().map(i -> Image.createImage(i.getOriginalFilename(), i.getName(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
