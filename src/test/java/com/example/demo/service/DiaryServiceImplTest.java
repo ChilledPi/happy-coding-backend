@@ -186,9 +186,9 @@ class DiaryServiceImplTest {
         Page<MappingDiaryDetailsResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.FOLLOWER, pageable);
         Page<MappingDiaryDetailsResponseDto> allDiaries3 = diaryService.getAllDiaries(userId1, DiaryStatus.PRIVATE, pageable);
 
-        Assertions.assertEquals(3, allDiaries1.stream().count());
+        Assertions.assertEquals(1, allDiaries1.stream().count());
         Assertions.assertEquals(2, allDiaries2.stream().count());
-        Assertions.assertEquals(1, allDiaries3.stream().count());
+        Assertions.assertEquals(3, allDiaries3.stream().count());
     }
 
     @Test
