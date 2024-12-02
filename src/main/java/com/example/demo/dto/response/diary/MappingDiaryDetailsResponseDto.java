@@ -32,10 +32,11 @@ public class MappingDiaryDetailsResponseDto {
     @Schema(description = "Longitude of the diary entry", example = "-122.4194")
     private double longitude;
 
+    private boolean isLiked;
 
 
 
-    public MappingDiaryDetailsResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, double latitude, double longitude) {
+    public MappingDiaryDetailsResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, double latitude, double longitude, boolean isLiked) {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;
@@ -43,6 +44,7 @@ public class MappingDiaryDetailsResponseDto {
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.isLiked = isLiked;
     }
 
     @Getter

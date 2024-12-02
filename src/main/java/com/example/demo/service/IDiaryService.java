@@ -23,7 +23,7 @@ public interface IDiaryService {
 
     Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable);
 
-    Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Pageable pageable);
+    Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Long userId, Pageable pageable);
 
     DiaryDetailsResponseDto getPublicDiary(Long diaryId);
 }

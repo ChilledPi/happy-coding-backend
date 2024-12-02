@@ -206,12 +206,12 @@ class DiaryServiceImplTest {
 
         diaryService.patchDiary(userId1, diaryId1, new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PRIVATE), images3, List.of());
         Pageable pageable = PageRequest.of(0, 1);
-        Page<MappingDiaryDetailsResponseDto> allPublicDiaries0 = diaryService.getAllPublicDiaries(pageable);
+        Page<MappingDiaryDetailsResponseDto> allPublicDiaries0 = diaryService.getAllPublicDiaries(userId1, pageable);
         List<MappingDiaryDetailsResponseDto> content0 = allPublicDiaries0.getContent();
         MappingDiaryDetailsResponseDto diariesDto0 = content0.get(0);
 
         Pageable nextPageable = pageable.next();
-        Page<MappingDiaryDetailsResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(nextPageable);
+        Page<MappingDiaryDetailsResponseDto> allPublicDiaries1 = diaryService.getAllPublicDiaries(userId2, nextPageable);
         List<MappingDiaryDetailsResponseDto> content1 = allPublicDiaries1.getContent();
         MappingDiaryDetailsResponseDto diariesDto1 = content1.get(0);
 
