@@ -25,5 +25,7 @@ public interface IDiaryService {
 
     Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Long userId, Pageable pageable);
 
+    Page<MappingDiaryDetailsResponseDto> getMyDiaries(Long userId, Pageable pageable);
+
     DiaryDetailsResponseDto getPublicDiary(Long diaryId);
 }

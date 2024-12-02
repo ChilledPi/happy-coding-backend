@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
+    Page<Diary> findByUser(Users users, Pageable pageable);
+
     Page<Diary> findByDiaryStatus(DiaryStatus diaryStatus, Pageable pageable);
 
 
