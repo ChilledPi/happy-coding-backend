@@ -119,8 +119,8 @@ public class DiaryServiceImpl implements IDiaryService {
                 diary.getDate(),
                 diary.getLatitude(),
                 diary.getLongitude(),
-                diary.getReactions().stream().anyMatch(reaction -> Objects.equals(reaction.getUser().getId(), userId)
-                )));
+                diary.getReactions().stream().anyMatch(reaction -> reaction.getUser().getId().equals(userId))
+                ));
     }
 
     @Override
