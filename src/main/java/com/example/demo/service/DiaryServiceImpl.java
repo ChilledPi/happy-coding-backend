@@ -103,12 +103,12 @@ public class DiaryServiceImpl implements IDiaryService {
     @Transactional
     public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
-        List<Following> followers = users.getFollowers();
-        List<Long> followerIds = followers.stream()
-                .map(following -> following.getId())
+        List<Following> followings = users.getFollows();
+        List<Long> userIds = followings.stream()
+                .map(following -> following.getFollower().getId())
                 .collect(Collectors.toList());
         List<DiaryStatus> statuses = Arrays.asList(DiaryStatus.FOLLOWER, DiaryStatus.PUBLIC);
-        Page<Diary> diaries = diaryRepository.findByUser_IdInAndDiaryStatusIn(followerIds, statuses, pageable);
+        Page<Diary> diaries = diaryRepository.findByUser_IdInAndDiaryStatusIn(userIds, statuses, pageable);
 
         return diaries.map(diary -> new MappingDiaryDetailsResponseDto(
                 diary.getUser().getId(),
