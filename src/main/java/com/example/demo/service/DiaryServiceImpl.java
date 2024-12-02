@@ -108,7 +108,7 @@ public class DiaryServiceImpl implements IDiaryService {
                 .map(following -> following.getId())
                 .collect(Collectors.toList());
         List<DiaryStatus> statuses = Arrays.asList(DiaryStatus.FOLLOWER, DiaryStatus.PUBLIC);
-        Page<Diary> diaries = diaryRepository.findByUserIdInAndStatusIn(followerIds, statuses, pageable);
+        Page<Diary> diaries = diaryRepository.findByUser_IdInAndDiaryStatusIn(followerIds, statuses, pageable);
 
         return diaries.map(diary -> new MappingDiaryDetailsResponseDto(
                 diary.getUser().getId(),

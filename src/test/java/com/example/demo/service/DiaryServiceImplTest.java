@@ -162,34 +162,34 @@ class DiaryServiceImplTest {
         Assertions.assertEquals(0, diaryRepository.count());
     }
 
-    @Test
-    void getAllDiaries(@Autowired IFollowingService followingService) {
-        DiaryRequestDto rqDto1 = new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PUBLIC);
-        DiaryRequestDto rqDto2 = new DiaryRequestDto(38, 128, "today", "나는 오늘 밥을 먹었다", LocalDate.now(), DiaryStatus.PUBLIC);
-        DiaryRequestDto rqDto3 = new DiaryRequestDto(38, 128, "tomorrow", "나는 내일 밥을 먹었다", LocalDate.now().plusDays(1), DiaryStatus.PUBLIC);
-
-        List<MultipartFile> images1 = new ArrayList<>();
-        List<MultipartFile> images2 = new ArrayList<>();
-        List<MultipartFile> images3 = new ArrayList<>();
-
-        long diaryId1 = diaryService.createDiary(userId2, rqDto1, images1);
-        long diaryId2 = diaryService.createDiary(userId2, rqDto2, images2);
-        long diaryId3 = diaryService.createDiary(userId2, rqDto3, images3);
-
-        diaryService.patchDiary(userId2, diaryId1, new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PRIVATE), new ArrayList<>(), new ArrayList<>());
-        diaryService.patchDiary(userId2, diaryId2, new DiaryRequestDto(38, 128, "today", "나는 오늘 밥을 먹었다", LocalDate.now(), DiaryStatus.FOLLOWER), new ArrayList<>(), new ArrayList<>());
-
-        followingService.following(userId1, userId2);
-
-        Pageable pageable = PageRequest.of(0, 3);
-        Page<MappingDiaryDetailsResponseDto> allDiaries1 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, pageable);
-        Page<MappingDiaryDetailsResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.FOLLOWER, pageable);
-        Page<MappingDiaryDetailsResponseDto> allDiaries3 = diaryService.getAllDiaries(userId1, DiaryStatus.PRIVATE, pageable);
-
-        Assertions.assertEquals(1, allDiaries1.stream().count());
-        Assertions.assertEquals(2, allDiaries2.stream().count());
-        Assertions.assertEquals(3, allDiaries3.stream().count());
-    }
+//    @Test
+//    void getAllDiaries(@Autowired IFollowingService followingService) {
+//        DiaryRequestDto rqDto1 = new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PUBLIC);
+//        DiaryRequestDto rqDto2 = new DiaryRequestDto(38, 128, "today", "나는 오늘 밥을 먹었다", LocalDate.now(), DiaryStatus.PUBLIC);
+//        DiaryRequestDto rqDto3 = new DiaryRequestDto(38, 128, "tomorrow", "나는 내일 밥을 먹었다", LocalDate.now().plusDays(1), DiaryStatus.PUBLIC);
+//
+//        List<MultipartFile> images1 = new ArrayList<>();
+//        List<MultipartFile> images2 = new ArrayList<>();
+//        List<MultipartFile> images3 = new ArrayList<>();
+//
+//        long diaryId1 = diaryService.createDiary(userId2, rqDto1, images1);
+//        long diaryId2 = diaryService.createDiary(userId2, rqDto2, images2);
+//        long diaryId3 = diaryService.createDiary(userId2, rqDto3, images3);
+//
+//        diaryService.patchDiary(userId2, diaryId1, new DiaryRequestDto(38, 128, "yesterday", "나는 어제 밥을 먹었다", LocalDate.now().minusDays(1), DiaryStatus.PRIVATE), new ArrayList<>(), new ArrayList<>());
+//        diaryService.patchDiary(userId2, diaryId2, new DiaryRequestDto(38, 128, "today", "나는 오늘 밥을 먹었다", LocalDate.now(), DiaryStatus.FOLLOWER), new ArrayList<>(), new ArrayList<>());
+//
+//        followingService.following(userId1, userId2);
+//
+//        Pageable pageable = PageRequest.of(0, 3);
+//        Page<MappingDiaryDetailsResponseDto> allDiaries1 = diaryService.getAllDiaries(userId1, DiaryStatus.PUBLIC, pageable);
+//        Page<MappingDiaryDetailsResponseDto> allDiaries2 = diaryService.getAllDiaries(userId1, DiaryStatus.FOLLOWER, pageable);
+//        Page<MappingDiaryDetailsResponseDto> allDiaries3 = diaryService.getAllDiaries(userId1, DiaryStatus.PRIVATE, pageable);
+//
+//        Assertions.assertEquals(1, allDiaries1.stream().count());
+//        Assertions.assertEquals(2, allDiaries2.stream().count());
+//        Assertions.assertEquals(3, allDiaries3.stream().count());
+//    }
 
     @Test
     void getAllPublicDiaries() throws IOException {

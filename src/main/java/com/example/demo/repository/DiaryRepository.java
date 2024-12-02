@@ -24,7 +24,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 //                    "AND d.user.id IN " +
 //                    "(SELECT f.follower.id FROM Following f WHERE f.follow.id = :userId)"
 //    )
-    //Page<Diary> findByFollowingUserAndDiaryStatusGreaterThanEqual(@Param("userId") Long userId, @Param("diaryStatus") DiaryStatus diaryStatus, Pageable pageable);
+//    Page<Diary> findByFollowingUserAndDiaryStatusGreaterThanEqual(@Param("userId") Long userId, @Param("diaryStatus") DiaryStatus diaryStatus, Pageable pageable);
 
-    Page<Diary> findByUserIdInAndStatusIn(List<Long> userIds, List<DiaryStatus> statuses, Pageable pageable);
+    Page<Diary> findByUser_IdInAndDiaryStatusIn(List<Long> userIds, List<DiaryStatus> diaryStatuses, Pageable pageable);
 }
