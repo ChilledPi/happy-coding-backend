@@ -120,7 +120,7 @@ public class DiaryController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<MappingDiaryDetailsResponseDto> diaries = iDiaryService.getAllDiaries(userId, DiaryStatus.FOLLOWER, pageable);
+        Page<MappingDiaryDetailsResponseDto> diaries = iDiaryService.getAllDiaries(userId, pageable);
         PaginatedResponseDto<MappingDiaryDetailsResponseDto> response = PaginatedResponseDto.of(diaries);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

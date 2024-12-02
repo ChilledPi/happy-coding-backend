@@ -21,7 +21,7 @@ public interface IDiaryService {
 
     void deleteDiary(Long userId, Long diaryId);
 
-    Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable);
+    Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, Pageable pageable);
 
     Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Long userId, Pageable pageable);
 

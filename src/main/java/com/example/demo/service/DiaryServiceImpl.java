@@ -5,6 +5,7 @@ import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
 import com.example.demo.entity.Diary;
+import com.example.demo.entity.Following;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Users;
 import com.example.demo.entity.enums.DiaryStatus;
@@ -20,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -98,11 +101,26 @@ public class DiaryServiceImpl implements IDiaryService {
 
     @Override
     @Transactional
-    public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
+    public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
-        return diaryRepository.findByFollowingUserAndDiaryStatusGreaterThanEqual(userId, diaryStatus, pageable)
-                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getUser().getId(), diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(),
-                        diary.getReactions().stream().anyMatch(reaction -> Objects.equals(reaction.getUser().getId(), userId))));
+        List<Following> followers = users.getFollowers();
+        List<Long> followerIds = followers.stream()
+                .map(following -> following.getId())
+                .collect(Collectors.toList());
+        List<DiaryStatus> statuses = Arrays.asList(DiaryStatus.FOLLOWER, DiaryStatus.PUBLIC);
+        Page<Diary> diaries = diaryRepository.findByUserIdInAndStatusIn(followerIds, statuses, pageable);
+
+        return diaries.map(diary -> new MappingDiaryDetailsResponseDto(
+                diary.getUser().getId(),
+                diary.getId(),
+                diary.getUser().getName(),
+                diary.getTitle(),
+                diary.getUser().getProfileImage(),
+                diary.getDate(),
+                diary.getLatitude(),
+                diary.getLongitude(),
+                diary.getReactions().stream().anyMatch(reaction -> Objects.equals(reaction.getUser().getId(), userId)
+                )));
     }
 
     @Override
