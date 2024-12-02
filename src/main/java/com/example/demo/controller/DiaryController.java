@@ -117,11 +117,10 @@ public class DiaryController {
     @GetMapping("/users/{userId}/diaries")
     public ResponseEntity<PaginatedResponseDto<MappingDiaryDetailsResponseDto>> getDiaries(
             @Parameter(description = "User ID") @PathVariable Long userId,
-            @Parameter(description = "Diary Status (e.g., PUBLIC, PRIVATE, FOLLOWER)") @RequestParam DiaryStatus diaryStatus,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<MappingDiaryDetailsResponseDto> diaries = iDiaryService.getAllDiaries(userId, diaryStatus, pageable);
+        Page<MappingDiaryDetailsResponseDto> diaries = iDiaryService.getAllDiaries(userId, DiaryStatus.FOLLOWER, pageable);
         PaginatedResponseDto<MappingDiaryDetailsResponseDto> response = PaginatedResponseDto.of(diaries);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
