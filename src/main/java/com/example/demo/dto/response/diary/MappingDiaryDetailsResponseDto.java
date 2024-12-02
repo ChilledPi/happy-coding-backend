@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 public class MappingDiaryDetailsResponseDto {
 
+    private Long userId;
+
     @Schema(description = "ID of the diary", example = "1")
     private Long diaryId;
 
@@ -36,7 +38,8 @@ public class MappingDiaryDetailsResponseDto {
 
 
 
-    public MappingDiaryDetailsResponseDto(Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, double latitude, double longitude, boolean isLiked) {
+    public MappingDiaryDetailsResponseDto(Long userId, Long diaryId, String name, String diaryTitle, Image profileImage, LocalDate date, double latitude, double longitude, boolean isLiked) {
+        this.userId = userId;
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;

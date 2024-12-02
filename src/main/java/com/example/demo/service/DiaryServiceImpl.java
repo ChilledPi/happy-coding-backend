@@ -93,7 +93,7 @@ public class DiaryServiceImpl implements IDiaryService {
     public Page<MappingDiaryDetailsResponseDto> getMyDiaries(Long userId, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
         return diaryRepository.findByUser(users, pageable)
-                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(), diary.getReactions().stream().anyMatch(reaction -> Objects.equals(userId, reaction.getUser().getId()))));
+                .map(diary -> new MappingDiaryDetailsResponseDto(userId, diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(), diary.getReactions().stream().anyMatch(reaction -> Objects.equals(userId, reaction.getUser().getId()))));
     }
 
     @Override
@@ -101,14 +101,15 @@ public class DiaryServiceImpl implements IDiaryService {
     public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
         return diaryRepository.findByFollowingUserAndDiaryStatusLessThanEqual(userId, diaryStatus, pageable)
-                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(), diary.getReactions().stream().anyMatch(reaction -> Objects.equals(userId, reaction.getUser().getId()))));
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getUser().getId(), diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(), diary.getReactions().stream().anyMatch(reaction -> Objects.equals(userId, reaction.getUser().getId()))));
     }
 
     @Override
     @Transactional
     public Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Long userId, Pageable pageable) {
-        return diaryRepository.findByDiaryStatus(DiaryStatus.PUBLIC, pageable)
-                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(),  diary.getDate(), diary.getLatitude(), diary.getLongitude(), diary.getReactions().stream().anyMatch(reaction -> Objects.equals(userId, reaction.getUser().getId()))));
+        Users users = userRepository.findById(userId).get();
+        return diaryRepository.findByUserNotAndDiaryStatus(users, DiaryStatus.PUBLIC, pageable)
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getUser().getId(), diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(),  diary.getDate(), diary.getLatitude(), diary.getLongitude(), diary.getReactions().stream().anyMatch(reaction -> Objects.equals(userId, reaction.getUser().getId()))));
     }
 
     @Override
