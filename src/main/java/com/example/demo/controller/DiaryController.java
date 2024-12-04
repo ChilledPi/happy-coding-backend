@@ -65,9 +65,9 @@ public class DiaryController {
                             array = @ArraySchema(schema = @Schema(type = "string", format = "binary"))))
             List<MultipartFile> images) {
 
-        iDiaryService.createDiary(userId, diaryRequestDto, images);
+        Long id = iDiaryService.createDiary(userId, diaryRequestDto, images);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseDto(Constants.STATUS_201, "Diary created success."));
+                .body(new ResponseDto(Constants.STATUS_201, "Diary created success.", id));
     }
 
     @Operation(summary = "Get a specific diary entry", description = "Retrieve a specific diary entry by its ID.")
