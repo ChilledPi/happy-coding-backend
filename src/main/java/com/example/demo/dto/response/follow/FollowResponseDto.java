@@ -21,7 +21,7 @@ public class FollowResponseDto {
     public FollowResponseDto(Long userIds, String followNames, Image profileImage) {
         this.userIds = userIds;
         this.followNames = followNames;
-        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
     }
 
     @Getter

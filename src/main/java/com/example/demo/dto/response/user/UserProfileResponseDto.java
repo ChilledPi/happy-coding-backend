@@ -32,7 +32,7 @@ public class UserProfileResponseDto {
         this.id = id;
         this.name = name;
         this.premiumBadge = premiumBadge;
-        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
         this.totalLikeCount = totalLikeCount;
         this.totalDiaryCount = totalDiaryCount;
         this.totalFollowCount = totalFollowCount;
