@@ -30,7 +30,7 @@ public class DiaryResponseDto {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;
-        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getUrl());
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
     }
 
     @Getter

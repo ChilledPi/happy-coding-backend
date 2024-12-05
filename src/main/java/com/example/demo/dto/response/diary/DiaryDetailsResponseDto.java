@@ -49,7 +49,7 @@ public class DiaryDetailsResponseDto {
         this.date = date;
         this.likesCount = likesCount;
         this.diaryStatus = diaryStatus;
-        this.images = images.stream().map(i -> new ImageResponseDto(i.getId(), i.getUrl())).toList();
+        this.images = images.stream().map(i -> new ImageResponseDto(i.getId(), i.getName())).toList();
     }
 
     @Getter
