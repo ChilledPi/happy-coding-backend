@@ -1,7 +1,6 @@
 package com.example.demo.dto.response.diary;
 
 import com.example.demo.entity.Image;
-import com.example.demo.util.ImageUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,9 +43,7 @@ public class MappingDiaryDetailsResponseDto {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;
-        this.profileImage = new ImageResponseDto(
-                profileImage.getId(),
-                ImageUtils.encodeImageToBase64(profileImage.getUrl()));
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;

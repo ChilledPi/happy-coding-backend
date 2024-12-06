@@ -2,7 +2,6 @@ package com.example.demo.dto.response.diary;
 
 import com.example.demo.entity.Image;
 import com.example.demo.entity.enums.DiaryStatus;
-import com.example.demo.util.ImageUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -50,11 +49,7 @@ public class DiaryDetailsResponseDto {
         this.date = date;
         this.likesCount = likesCount;
         this.diaryStatus = diaryStatus;
-        this.images = images.stream()
-                .map(i -> new ImageResponseDto(
-                        i.getId(),
-                        ImageUtils.encodeImageToBase64(i.getUrl())
-                )).toList();
+        this.images = images.stream().map(i -> new ImageResponseDto(i.getId(), i.getName())).toList();
     }
 
     @Getter

@@ -1,8 +1,6 @@
 package com.example.demo.dto.response.user;
 
-import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.entity.Image;
-import com.example.demo.util.ImageUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -34,9 +32,7 @@ public class UserProfileResponseDto {
         this.id = id;
         this.name = name;
         this.premiumBadge = premiumBadge;
-        this.profileImage = new ImageResponseDto(
-                profileImage.getId(),
-                ImageUtils.encodeImageToBase64(profileImage.getUrl()));
+        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
         this.totalLikeCount = totalLikeCount;
         this.totalDiaryCount = totalDiaryCount;
         this.totalFollowCount = totalFollowCount;
