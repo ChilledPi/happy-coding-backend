@@ -87,7 +87,11 @@ public class DiaryServiceImpl implements IDiaryService {
     @Transactional
     public UserDiaryResponseDto getUserDiary(Long userId, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId).get();
-        return new UserDiaryResponseDto(diary.getUser().getName(), diary.getLatitude(), diary.getLongitude(), diary.getTitle(), diary.getContent(), diary.getDate(), diary.getLikesCount(), diary.getDiaryStatus(), diary.getImages());
+        return new UserDiaryResponseDto(diary.getUser().getName(),
+                diary.getLatitude(), diary.getLongitude(),
+                diary.getTitle(), diary.getContent(),
+                diary.getDate(), diary.getLikesCount(),
+                diary.getDiaryStatus(), diary.getImages());
     }
 
     @Override
