@@ -71,7 +71,7 @@ public class UserServiceImpl implements IUserService {
     public void uploadProfilePicture(Long userId, MultipartFile image) {
 
         Users users = userRepository.findById(userId).get();
-        String baseUploadDir = "/home/momakapa/happy-coding-backend/uploads";
+        String baseUploadDir = "/home/momakapa/uploads";
         String uploadDir = baseUploadDir + "/user-images/" + users.getId();
         File dir = new File(uploadDir);
         if (!dir.exists()) {

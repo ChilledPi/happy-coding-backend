@@ -48,7 +48,7 @@ public class DiaryServiceImpl implements IDiaryService {
         users.addDiary(diary);
         diaryRepository.save(diary);
 
-        String baseUploadDir = "/home/momakapa/happy-coding-backend/uploads";
+        String baseUploadDir = "/home/momakapa/uploads";
         String uploadDir = baseUploadDir + "/diary-images/" + diary.getId();
         File dir = new File(uploadDir);
         if (!dir.exists()) {
