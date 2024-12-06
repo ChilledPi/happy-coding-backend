@@ -48,10 +48,13 @@ public class DiaryServiceImpl implements IDiaryService {
         users.addDiary(diary);
         diaryRepository.save(diary);
 
-        String uploadDir = "uploads/diary-images/" + diary.getId();
+        String baseUploadDir = "/home/momakapa/happy-coding-backend/uploads";
+        String uploadDir = baseUploadDir + "/diary-images/" + diary.getId();
         File dir = new File(uploadDir);
         if (!dir.exists()) {
-            dir.mkdirs();
+            if (!dir.mkdirs()) {
+                throw new RuntimeException("Failed to create directory: " + uploadDir);
+            }
         }
 
         for (MultipartFile image : images) {
