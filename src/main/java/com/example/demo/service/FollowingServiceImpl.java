@@ -51,7 +51,7 @@ public class FollowingServiceImpl implements IFollowingService {
     public List<FollowResponseDto> getAllFollowings(Long userId) {
         Users users = userRepository.findById(userId).get();
         return followingRepository.findByFollow(users).stream()
-                .map(following -> new FollowResponseDto(following.getFollower().getId(), following.getFollower().getName(), following.getFollow().getProfileImage()))
+                .map(following -> new FollowResponseDto(following.getFollower().getId(), following.getFollower().getName(), following.getFollower().getProfileImage()))
                 .toList();
     }
 }
