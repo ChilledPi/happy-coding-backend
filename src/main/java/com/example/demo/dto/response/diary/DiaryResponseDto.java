@@ -1,6 +1,7 @@
 package com.example.demo.dto.response.diary;
 
 import com.example.demo.entity.Image;
+import com.example.demo.util.ImageUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -30,7 +31,9 @@ public class DiaryResponseDto {
         this.diaryId = diaryId;
         this.name = name;
         this.diaryTitle = diaryTitle;
-        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
+        this.profileImage = new ImageResponseDto(
+                profileImage.getId(),
+                ImageUtils.encodeImageToBase64(profileImage.getUrl()));
     }
 
     @Getter
