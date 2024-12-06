@@ -34,9 +34,15 @@ public class UserProfileResponseDto {
         this.id = id;
         this.name = name;
         this.premiumBadge = premiumBadge;
+        // 조건 추가: profileImage.getUrl()이 "default.jpg"가 아닌 경우에만 인코딩
+        String encodedUrl = "default.jpg".equals(profileImage.getUrl())
+                ? profileImage.getUrl()
+                : ImageUtils.encodeImageToBase64(profileImage.getUrl());
+
         this.profileImage = new ImageResponseDto(
                 profileImage.getId(),
-                ImageUtils.encodeImageToBase64(profileImage.getUrl()));
+                encodedUrl
+        );
         this.totalLikeCount = totalLikeCount;
         this.totalDiaryCount = totalDiaryCount;
         this.totalFollowCount = totalFollowCount;
