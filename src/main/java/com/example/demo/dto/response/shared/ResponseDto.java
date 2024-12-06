@@ -14,4 +14,13 @@ public class ResponseDto {
 
     @Schema(description = "Message describing the status", example = "Success")
     private String statusMessage;
+    private Object data;
+
+
+    public ResponseDto(String statusCode, String statusMessage) {
+        this.statusCode = statusCode;
+        this.statusMessage = statusMessage;
+    }
+
+
 }

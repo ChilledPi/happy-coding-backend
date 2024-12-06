@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.diary.DiaryRequestDto;
-import com.example.demo.dto.response.diary.DiaryResponseDto;
 import com.example.demo.dto.response.diary.DiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.MappingDiaryDetailsResponseDto;
 import com.example.demo.dto.response.diary.UserDiaryResponseDto;
@@ -12,6 +11,7 @@ import com.example.demo.entity.enums.DiaryStatus;
 import com.example.demo.entity.enums.ImageType;
 import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.ImageRepository;
+import com.example.demo.repository.ReactionRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,20 +32,54 @@ public class DiaryServiceImpl implements IDiaryService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
     private final ImageRepository imageRepository;
+    private final ReactionRepository reactionRepository;
 
 
     @Override
     @Transactional
     public long createDiary(Long userId, DiaryRequestDto diaryRequestDto, List<MultipartFile> images) {
         Users users = userRepository.findById(userId).get();
-        Diary diary = Diary.createDiary(diaryRequestDto.getLatitude(), diaryRequestDto.getLongitude(), diaryRequestDto.getTitle(), diaryRequestDto.getContent());
+        Diary diary = Diary.createDiary(
+                diaryRequestDto.getLatitude(),
+                diaryRequestDto.getLongitude(),
+                diaryRequestDto.getTitle(),
+                diaryRequestDto.getContent(),
+                diaryRequestDto.getDiaryStatus());
         users.addDiary(diary);
         diaryRepository.save(diary);
-        images.stream().map(i -> Image.createImage(i.getOriginalFilename(), i.getName(), i.getContentType(), i.getSize(), ImageType.DIARY_IMAGE, users, diary))
-                .forEach(i -> {
-                    diary.addImage(i);
-                    imageRepository.save(i);
-                });
+
+        String baseUploadDir = "/home/momakapa/happy-coding-backend/uploads";
+        String uploadDir = baseUploadDir + "/diary-images/" + diary.getId();
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new RuntimeException("Failed to create directory: " + uploadDir);
+            }
+        }
+
+        for (MultipartFile image : images) {
+            try {
+                String originalFilename = image.getOriginalFilename();
+                String filePath = uploadDir + "/" + originalFilename;
+                File file = new File(filePath);
+                image.transferTo(file); // 로컬 디렉토리에 저장
+
+                // 데이터베이스에 파일 경로 저장
+                Image imageEntity = Image.createImage(
+                        originalFilename,
+                        filePath,
+                        image.getContentType(),
+                        image.getSize(),
+                        ImageType.DIARY_IMAGE,
+                        users,
+                        diary
+                );
+                imageRepository.save(imageEntity);
+                diary.addImage(imageEntity);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save image: " + image.getOriginalFilename(), e);
+            }
+        }
         return diary.getId();
     }
 
@@ -87,17 +123,30 @@ public class DiaryServiceImpl implements IDiaryService {
 
     @Override
     @Transactional
-    public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
+    public Page<MappingDiaryDetailsResponseDto> getMyDiaries(Long userId, Pageable pageable) {
         Users users = userRepository.findById(userId).get();
-        return diaryRepository.findByUserAndDiaryStatusLessThanEqual(users, diaryStatus, pageable)
-                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), users.getName(), diary.getTitle(), users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude()));
+        return diaryRepository.findByUser(users, pageable)
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getUser().getId(), diary.getId(), diary.getUser().getName(), diary.getTitle(),
+                        users.getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(),
+                        diary.getReactions().stream().anyMatch(reaction -> Objects.equals(reaction.getUser().getId(), userId))));
     }
 
     @Override
     @Transactional
-    public Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Pageable pageable) {
-        return diaryRepository.findByDiaryStatus(DiaryStatus.PUBLIC, pageable)
-                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(),  diary.getDate(), diary.getLatitude(), diary.getLongitude()));
+    public Page<MappingDiaryDetailsResponseDto> getAllDiaries(Long userId, DiaryStatus diaryStatus, Pageable pageable) {
+        Users users = userRepository.findById(userId).get();
+        return diaryRepository.findByFollowingUserAndDiaryStatusGreaterThanEqual(userId, diaryStatus, pageable)
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getUser().getId(), diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(), diary.getDate(), diary.getLatitude(), diary.getLongitude(),
+                        diary.getReactions().stream().anyMatch(reaction -> Objects.equals(reaction.getUser().getId(), userId))));
+    }
+
+    @Override
+    @Transactional
+    public Page<MappingDiaryDetailsResponseDto> getAllPublicDiaries(Long userId, Pageable pageable) {
+        Users users = userRepository.findById(userId).get();
+        return diaryRepository.findByUserNotAndDiaryStatus(users, DiaryStatus.PUBLIC, pageable)
+                .map(diary -> new MappingDiaryDetailsResponseDto(diary.getUser().getId(), diary.getId(), diary.getUser().getName(), diary.getTitle(), diary.getUser().getProfileImage(),  diary.getDate(), diary.getLatitude(), diary.getLongitude(),
+                        diary.getReactions().stream().anyMatch(reaction -> Objects.equals(reaction.getUser().getId(), userId))));
     }
 
     @Override
