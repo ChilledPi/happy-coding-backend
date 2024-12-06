@@ -1,6 +1,7 @@
 package com.example.demo.dto.response.follow;
 
 import com.example.demo.entity.Image;
+import com.example.demo.util.ImageUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,7 +22,7 @@ public class FollowResponseDto {
     public FollowResponseDto(Long userIds, String followNames, Image profileImage) {
         this.userIds = userIds;
         this.followNames = followNames;
-        this.profileImage = new ImageResponseDto(profileImage.getId(), profileImage.getName());
+        this.profileImage = new ImageResponseDto(profileImage.getId(), ImageUtils.encodeImageToBase64(profileImage.getUrl()));
     }
 
     @Getter
